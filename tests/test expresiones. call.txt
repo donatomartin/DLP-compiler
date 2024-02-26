@@ -1,0 +1,29 @@
+// call -----------------------
+
+struct Persona {
+    edad:int;
+}
+
+callNoParams():int { }
+
+callWithParams(a:int, f:float, c:char):int { }
+
+testCall() {
+
+    var a:int;
+    var f:float;
+    var c:char;
+    var v:[10]int;
+    var raul:Persona;
+
+    a = callNoParams();
+
+    a = callWithParams(1, 1.5, 'a');
+    a = callWithParams(1, 1.5, '\n');
+    a = callWithParams(a, f, c);
+    a = callWithParams(v[2], <float>(v[2]), <char>(v[2]));
+    a = callWithParams(raul.edad, <float>(raul.edad), <char>(raul.edad));
+    a = callWithParams(raul.edad && 2, f + 2.0, c);
+
+    print callWithParams(callNoParams(), <float>(callNoParams()) + 1.5, <char>(callNoParams()));
+}

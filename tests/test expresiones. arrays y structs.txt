@@ -1,0 +1,34 @@
+struct B {
+    value:int;
+}
+
+struct A {
+    b:B;
+}
+
+var aStruct:A;
+
+var v:[10][20][30]int;
+
+struct ConArray {
+    v:[10]A;
+}
+
+
+var w:[10]ConArray;
+
+main() {
+
+    print aStruct.b.value;
+    aStruct.b.value = 10;
+
+    print v[1][2][3];
+    v[1][2][3] = 10;
+
+    aStruct.b.value = v[1][2][3];
+    v[1][2][3] = aStruct.b.value;
+
+    print w[1].v[2].b.value;
+    w[1].v[2].b.value = 10;
+
+}
