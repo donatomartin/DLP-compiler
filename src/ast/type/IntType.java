@@ -1,6 +1,6 @@
 // Generated with VGen 2.0.0
 
-package ast;
+package ast.type;
 
 import visitor.Visitor;
 
@@ -11,23 +11,25 @@ import visitor.Visitor;
 // %% -------------------------------
 
 /*
-	AST -> 
+	intType: type -> 
+	type -> 
 */
-public interface AST {
+public class IntType extends AbstractType  {
 
 
 
-    // ------------------------------
-    // AST Methods
+    // ----------------------------------
+    // Helper methods
 
-    public Object accept(Visitor visitor, Object param);
+    @Override
+    public Object accept(Visitor v, Object param) {
+        return v.visit(this, param);
+    }
 
-    Position start();
-    Position end();
-
-    public void updatePositions(Object... children);
-    public void updatePositions(Position newStart, Position newEnd);
-
+    @Override
+    public String toString() {
+        return "IntType{" + "}";
+    }
 
 
     // %% User Members -------------------------

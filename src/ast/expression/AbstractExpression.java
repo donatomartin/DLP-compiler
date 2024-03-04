@@ -1,8 +1,8 @@
 // Generated with VGen 2.0.0
 
-package ast;
+package ast.expression;
 
-import visitor.Visitor;
+import ast.*;
 
 // %% User Declarations -------------
 
@@ -11,22 +11,10 @@ import visitor.Visitor;
 // %% -------------------------------
 
 /*
-	AST -> 
+	expression -> 
 */
-public interface AST {
+public abstract class AbstractExpression extends AbstractAST implements Expression {
 
-
-
-    // ------------------------------
-    // AST Methods
-
-    public Object accept(Visitor visitor, Object param);
-
-    Position start();
-    Position end();
-
-    public void updatePositions(Object... children);
-    public void updatePositions(Position newStart, Position newEnd);
 
 
 
