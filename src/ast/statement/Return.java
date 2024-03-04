@@ -3,6 +3,7 @@
 package ast.statement;
 
 import ast.expression.*;
+import java.util.Optional;
 import visitor.Visitor;
 
 // %% User Declarations -------------
@@ -12,7 +13,7 @@ import visitor.Visitor;
 // %% -------------------------------
 
 /*
-	return: statement -> expression:expression
+	return: statement -> expression:expression?
 	statement -> 
 */
 public class Return extends AbstractStatement  {
@@ -20,17 +21,17 @@ public class Return extends AbstractStatement  {
     // ----------------------------------
     // Instance Variables
 
-	// return: statement -> expression
-	private Expression expression;
+	// return: statement -> expression?
+	private Optional<Expression> expression;
 
     // ----------------------------------
     // Constructors
 
-	public Return(Expression expression) {
+	public Return(Optional<Expression> expression) {
 		super();
 
 		if (expression == null)
-			throw new IllegalArgumentException("Parameter 'expression' can't be null. Pass a non-null value or use 'expression?' in the abstract grammar");
+			expression = Optional.empty();
 		this.expression = expression;
 
 		updatePositions(expression);
@@ -39,27 +40,24 @@ public class Return extends AbstractStatement  {
 	public Return(Object expression) {
 		super();
 
-        if (expression == null)
-            throw new IllegalArgumentException("Parameter 'expression' can't be null. Pass a non-null value or use 'expression?' in the abstract grammar");
-		this.expression = (Expression) expression;
-
+        this.expression = castOptional(expression, Expression.class);
 		updatePositions(expression);
 	}
 
 
     // ----------------------------------
-    // return: statement -> expression
+    // return: statement -> expression?
 
-	// Child 'expression' 
+	// Child 'expression?' 
 
-	public void setExpression(Expression expression) {
+	public void setExpression(Optional<Expression> expression) {
 		if (expression == null)
-			throw new IllegalArgumentException("Parameter 'expression' can't be null. Pass a non-null value or use 'expression?' in the abstract grammar");
+			expression = Optional.empty();
 		this.expression = expression;
 
 	}
 
-    public Expression getExpression() {
+    public Optional<Expression> getExpression() {
         return expression;
     }
 

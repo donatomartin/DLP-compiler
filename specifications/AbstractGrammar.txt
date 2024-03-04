@@ -22,7 +22,7 @@ call:statement -> expression;
 assignment:statement -> left:expression right:expression;
 conditional:statement -> expression ifStatements:statement* elseStatements:statement*;
 while:statement -> expression loopStatements:statement*;
-return:statement -> expression;
+return:statement -> expression?;
 
 intType:type -> ;
 floatType:type -> ;

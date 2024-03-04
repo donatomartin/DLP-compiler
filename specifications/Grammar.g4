@@ -42,13 +42,15 @@ parameter returns [Parameter ast]
 	;
 
 statement returns [Statement ast]
-	: ('print'|'printsp' | 'println') expression (','expression)* ';' { $ast = new Print($expression.ast); }
+	: ('print'|'printsp' | 'println') expression ';' { $ast = new Print($expression.ast); }
 	| 'read' expression ';' { $ast = new Read($expression.ast); }
-	| expression ';' { $ast = new Call($expression.ast); }
+	| e=expression ';' { $ast = new Call($e.ast); }
 	| left=expression '=' right=expression ';' { $ast = new Assignment($left.ast, $right.ast); }
-	| 'if' '(' expression ')' '{' ifStatements+=statement* '}' ('else' '{' elseStatements+=statement* '}')? { $ast = new Conditional($expression.ast, $ifStatements, $elseStatements); }
-	| 'while' '(' expression ')' '{' loopStatements+=statement* '}' { $ast = new While($expression.ast, $loopStatements); }
-	| 'return' (expression)? ';' { $ast = new Return($expression.ast); }
+	| 'if' '(' e=expression ')' '{' ifStatements+=statement* '}' 'else' '{' elseStatements+=statement* '}' { $ast = new Conditional($e.ast, $ifStatements, $elseStatements); }
+	| 'if' '(' e=expression ')' '{' ifStatements+=statement* '}'  { $ast = new Conditional($e.ast, $ifStatements, null); }
+	| 'while' '(' e=expression ')' '{' loopStatements+=statement* '}' { $ast = new While($e.ast, $loopStatements); }
+	| 'return' e=expression ';' { $ast = new Return($e.ast); }
+	| 'return' ';' {$ast = new Return(null); }
 	;
 
 expression returns [Expression ast]
@@ -57,8 +59,8 @@ expression returns [Expression ast]
 	| FLOAT_LITERAL { $ast = new FloatLiteral($FLOAT_LITERAL); }
 	| CHAR_LITERAL { $ast = new CharLiteral($CHAR_LITERAL); }
 	| IDENT '(' arguments ')' { $ast = new FunctionCall($IDENT, $arguments.list); }
-	| expression '.' IDENT { $ast = new StructAccess($expression.ast, $IDENT); }
-	| left=expression '[' right=expression ']' { $ast = new ArrayAccess($right.ast, $right.ast); }
+	| e=expression '.' IDENT { $ast = new StructAccess($e.ast, $IDENT); }
+	| left=expression '[' right=expression ']' { $ast = new ArrayAccess($left.ast, $right.ast); }
 	| '(' expression ')' { $ast = $expression.ast; }
 	| '<' type '>' '(' expression ')' { $ast = new Cast($type.ast, $expression.ast); }
 	| left=expression operator=('*'|'/'|'%') right=expression { $ast = new Arithmetic($left.ast, $operator, $right.ast); }

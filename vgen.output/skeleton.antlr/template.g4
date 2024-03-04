@@ -43,7 +43,7 @@ statement returns[Statement ast]
     | left=expression right=expression    { $ast = new Assignment($left.ast, $right.ast); }      
     | expression ifStatements+=statement* elseStatements+=statement* { $ast = new Conditional($expression.ast, $ifStatements, $elseStatements); }
     | expression loopStatements+=statement* { $ast = new While($expression.ast, $loopStatements); }
-    | expression                          { $ast = new Return($expression.ast); }                
+    | expression?                         { $ast = new Return(($expression.ctx == null) ? null : $expression.ast); }
 	;
 
 expression returns[Expression ast]

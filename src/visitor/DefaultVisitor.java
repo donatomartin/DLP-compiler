@@ -119,7 +119,7 @@ public class DefaultVisitor implements Visitor {
 	@Override
 	public Object visit(Return returnValue, Object param) {
 
-		returnValue.getExpression().accept(this, param);
+		returnValue.getExpression().ifPresent(expression -> expression.accept(this, param));
 		return null;
 	}
 
