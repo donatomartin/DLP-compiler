@@ -17,7 +17,12 @@ program returns [Program ast]
 definition returns [Definition ast]
 	: 'var' IDENT ':' type ';' { $ast = new VarDefinition($IDENT, $type.ast); }
 	| 'struct' IDENT '{' fields '}' { $ast = new StructDefinition($IDENT, $fields.list); }
-	| IDENT '(' parameters ')' ':' type '{' definitions+=definition* statements+=statement* '}'  { $ast = new FunctionDefinition($IDENT, $parameters.list, $type.ast, $definitions, $statements); }
+	| functionDefinition { $ast = $functionDefinition.ast; }
+	;
+
+functionDefinition returns [FunctionDefinition ast]
+	: IDENT '(' parameters ')' ':' type '{' definitions+=definition* statements+=statement* '}'  { $ast = new FunctionDefinition($IDENT, $parameters.list, $type.ast, $definitions, $statements); }
+	| IDENT '(' parameters ')' '{' definitions+=definition* statements+=statement* '}'  { $ast = new FunctionDefinition($IDENT, $parameters.list, null, $definitions, $statements); }
 	;
 
 fields returns [List<Field> list = new ArrayList<Field>()]

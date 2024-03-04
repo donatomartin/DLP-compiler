@@ -74,7 +74,7 @@ class FunctionDefinition {
 }
 AbstractDefinition <|-[#808080]- FunctionDefinition
 FunctionDefinition o-[#404040,thickness=2]- "✱" Parameter : parameters >
-FunctionDefinition o-[#404040,thickness=2]-  Type : type >
+FunctionDefinition o-[#404040,thickness=2]- "0..1" Type : type >
 FunctionDefinition o-[#404040,thickness=2]- "✱" Definition : definitions >
 FunctionDefinition o-[#404040,thickness=2]- "✱" Statement : statements >
 
@@ -142,9 +142,9 @@ class CharType {
 AbstractType <|-[#808080]- CharType
 
 class ArrayType {
+	+int intValue
 }
 AbstractType <|-[#808080]- ArrayType
-ArrayType o-[#404040,thickness=2]-  IntLiteral : intLiteral >
 ArrayType o-[#404040,thickness=2]-  Type : type >
 
 class StructType {

@@ -99,12 +99,12 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 		return null;
 	}
 
-	// class FunctionDefinition(String name, List<Parameter> parameters, Type type, List<Definition> definitions, List<Statement> statements)
+	// class FunctionDefinition(String name, List<Parameter> parameters, Optional<Type> type, List<Definition> definitions, List<Statement> statements)
 	@Override
 	public Object visit(FunctionDefinition functionDefinition, Object param) {
 
 		// functionDefinition.getParameters().forEach(parameter -> parameter.accept(this, param));
-		// functionDefinition.getType().accept(this, param);
+		// functionDefinition.getType().ifPresent(type -> type.accept(this, param));
 		// functionDefinition.getDefinitions().forEach(definition -> definition.accept(this, param));
 		// functionDefinition.getStatements().forEach(statement -> statement.accept(this, param));
 		super.visit(functionDefinition, param);
@@ -227,11 +227,10 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 		return null;
 	}
 
-	// class ArrayType(IntLiteral intLiteral, Type type)
+	// class ArrayType(int intValue, Type type)
 	@Override
 	public Object visit(ArrayType arrayType, Object param) {
 
-		// arrayType.getIntLiteral().accept(this, param);
 		// arrayType.getType().accept(this, param);
 		super.visit(arrayType, param);
 

@@ -17,19 +17,15 @@ program returns[Program ast]
 definition returns[Definition ast]
     : name=IDENT type                     { $ast = new VarDefinition($name, $type.ast); }        
     | name=IDENT fields+=field*           { $ast = new StructDefinition($name, $fields); }       
-    | name=IDENT parameters+=parameter* type definitions+=definition* statements+=statement* { $ast = new FunctionDefinition($name, $parameters, $type.ast, $definitions, $statements); }
+    | name=IDENT parameters+=parameter* type? definitions+=definition* statements+=statement* { $ast = new FunctionDefinition($name, $parameters, ($type.ctx == null) ? null : $type.ast, $definitions, $statements); }
 	;
 
 type returns[Type ast]
     :                                     { $ast = new IntType(); }                              
     |                                     { $ast = new FloatType(); }                            
     |                                     { $ast = new CharType(); }                             
-    | intLiteral type                     { $ast = new ArrayType($intLiteral.ast, $type.ast); }  
+    | INT_LITERAL type                    { $ast = new ArrayType($INT_LITERAL, $type.ast); }     
     | name=IDENT                          { $ast = new StructType($name); }                      
-	;
-
-intLiteral returns[IntLiteral ast]
-    : INT_LITERAL                         { $ast = new IntLiteral($INT_LITERAL); }               
 	;
 
 field returns[Field ast]

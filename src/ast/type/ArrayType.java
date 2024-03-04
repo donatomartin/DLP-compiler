@@ -2,7 +2,7 @@
 
 package ast.type;
 
-import ast.expression.*;
+import org.antlr.v4.runtime.Token;
 import visitor.Visitor;
 
 // %% User Declarations -------------
@@ -12,7 +12,7 @@ import visitor.Visitor;
 // %% -------------------------------
 
 /*
-	arrayType: type -> intLiteral:intLiteral type:type
+	arrayType: type -> intValue:int type:type
 	type -> 
 */
 public class ArrayType extends AbstractType  {
@@ -20,56 +20,57 @@ public class ArrayType extends AbstractType  {
     // ----------------------------------
     // Instance Variables
 
-	// arrayType: type -> intLiteral type
-	private IntLiteral intLiteral;
+	// arrayType: type -> int type
+	private int intValue;
 	private Type type;
 
     // ----------------------------------
     // Constructors
 
-	public ArrayType(IntLiteral intLiteral, Type type) {
+	public ArrayType(int intValue, Type type) {
 		super();
 
-		if (intLiteral == null)
-			throw new IllegalArgumentException("Parameter 'intLiteral' can't be null. Pass a non-null value or use 'intLiteral?' in the abstract grammar");
-		this.intLiteral = intLiteral;
+		this.intValue = intValue;
 
 		if (type == null)
 			throw new IllegalArgumentException("Parameter 'type' can't be null. Pass a non-null value or use 'type?' in the abstract grammar");
 		this.type = type;
 
-		updatePositions(intLiteral, type);
+		updatePositions(intValue, type);
 	}
 
-	public ArrayType(Object intLiteral, Object type) {
+	public ArrayType(Object intValue, Object type) {
 		super();
 
-        if (intLiteral == null)
-            throw new IllegalArgumentException("Parameter 'intLiteral' can't be null. Pass a non-null value or use 'intLiteral?' in the abstract grammar");
-		this.intLiteral = (IntLiteral) intLiteral;
+        if (intValue == null)
+            throw new IllegalArgumentException("Parameter 'intValue' can't be null. Pass a non-null value or use 'int?' in the abstract grammar");
+        var intValue_temp = intValue;
+        if (intValue_temp instanceof Token)
+            intValue_temp = ((Token) intValue_temp).getText();
+        if (intValue_temp instanceof String)
+            intValue_temp = Integer.valueOf((String) intValue_temp);
+        this.intValue = (int) intValue_temp;
 
         if (type == null)
             throw new IllegalArgumentException("Parameter 'type' can't be null. Pass a non-null value or use 'type?' in the abstract grammar");
 		this.type = (Type) type;
 
-		updatePositions(intLiteral, type);
+		updatePositions(intValue, type);
 	}
 
 
     // ----------------------------------
-    // arrayType: type -> intLiteral type
+    // arrayType: type -> int type
 
-	// Child 'intLiteral' 
+	// Child 'int' 
 
-	public void setIntLiteral(IntLiteral intLiteral) {
-		if (intLiteral == null)
-			throw new IllegalArgumentException("Parameter 'intLiteral' can't be null. Pass a non-null value or use 'intLiteral?' in the abstract grammar");
-		this.intLiteral = intLiteral;
+	public void setIntValue(int intValue) {
+		this.intValue = intValue;
 
 	}
 
-    public IntLiteral getIntLiteral() {
-        return intLiteral;
+    public int getIntValue() {
+        return intValue;
     }
 
 
@@ -97,7 +98,7 @@ public class ArrayType extends AbstractType  {
 
     @Override
     public String toString() {
-        return "ArrayType{" + " intLiteral=" + this.getIntLiteral() + " type=" + this.getType() + "}";
+        return "ArrayType{" + " intValue=" + this.getIntValue() + " type=" + this.getType() + "}";
     }
 
 

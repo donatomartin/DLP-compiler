@@ -11,7 +11,7 @@ program -> definition*;
 
 varDefinition:definition -> string type;
 structDefinition:definition -> string field*;
-functionDefinition:definition -> string parameter* type definition* statement*;
+functionDefinition:definition -> string parameter* type? definition* statement*;
 
 field -> string type;
 parameter -> string type;
@@ -27,7 +27,7 @@ return:statement -> expression;
 intType:type -> ;
 floatType:type -> ;
 charType:type -> ;
-arrayType:type -> intLiteral type;
+arrayType:type -> int type;
 structType:type -> string;
 
 variable:expression -> string;

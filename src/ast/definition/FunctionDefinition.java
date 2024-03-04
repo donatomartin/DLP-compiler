@@ -8,6 +8,7 @@ import ast.statement.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Stream;
+import java.util.Optional;
 import org.antlr.v4.runtime.Token;
 import visitor.Visitor;
 
@@ -18,7 +19,7 @@ import visitor.Visitor;
 // %% -------------------------------
 
 /*
-	functionDefinition: definition -> name:string parameters:parameter* type:type definitions:definition* statements:statement*
+	functionDefinition: definition -> name:string parameters:parameter* type:type? definitions:definition* statements:statement*
 	definition -> 
 */
 public class FunctionDefinition extends AbstractDefinition  {
@@ -26,17 +27,17 @@ public class FunctionDefinition extends AbstractDefinition  {
     // ----------------------------------
     // Instance Variables
 
-	// functionDefinition: definition -> string parameter* type definition* statement*
+	// functionDefinition: definition -> string parameter* type? definition* statement*
 	private String name;
 	private List<Parameter> parameters;
-	private Type type;
+	private Optional<Type> type;
 	private List<Definition> definitions;
 	private List<Statement> statements;
 
     // ----------------------------------
     // Constructors
 
-	public FunctionDefinition(String name, List<Parameter> parameters, Type type, List<Definition> definitions, List<Statement> statements) {
+	public FunctionDefinition(String name, List<Parameter> parameters, Optional<Type> type, List<Definition> definitions, List<Statement> statements) {
 		super();
 
 		if (name == null)
@@ -48,7 +49,7 @@ public class FunctionDefinition extends AbstractDefinition  {
 		this.parameters = parameters;
 
 		if (type == null)
-			throw new IllegalArgumentException("Parameter 'type' can't be null. Pass a non-null value or use 'type?' in the abstract grammar");
+			type = Optional.empty();
 		this.type = type;
 
 		if (definitions == null)
@@ -70,10 +71,7 @@ public class FunctionDefinition extends AbstractDefinition  {
 		this.name = (name instanceof Token) ? ((Token) name).getText() : (String) name;
 
         this.parameters = castList(parameters, unwrapIfContext.andThen(Parameter.class::cast));
-        if (type == null)
-            throw new IllegalArgumentException("Parameter 'type' can't be null. Pass a non-null value or use 'type?' in the abstract grammar");
-		this.type = (Type) type;
-
+        this.type = castOptional(type, Type.class);
         this.definitions = castList(definitions, unwrapIfContext.andThen(Definition.class::cast));
         this.statements = castList(statements, unwrapIfContext.andThen(Statement.class::cast));
 		updatePositions(name, parameters, type, definitions, statements);
@@ -81,7 +79,7 @@ public class FunctionDefinition extends AbstractDefinition  {
 
 
     // ----------------------------------
-    // functionDefinition: definition -> string parameter* type definition* statement*
+    // functionDefinition: definition -> string parameter* type? definition* statement*
 
 	// Child 'string' 
 
@@ -115,16 +113,16 @@ public class FunctionDefinition extends AbstractDefinition  {
     }
 
 
-	// Child 'type' 
+	// Child 'type?' 
 
-	public void setType(Type type) {
+	public void setType(Optional<Type> type) {
 		if (type == null)
-			throw new IllegalArgumentException("Parameter 'type' can't be null. Pass a non-null value or use 'type?' in the abstract grammar");
+			type = Optional.empty();
 		this.type = type;
 
 	}
 
-    public Type getType() {
+    public Optional<Type> getType() {
         return type;
     }
 

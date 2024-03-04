@@ -1,1 +1,4 @@
-var a:int;
+
+fun(a:int):int {
+
+}
