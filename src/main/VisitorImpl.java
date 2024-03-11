@@ -118,8 +118,9 @@ public class VisitorImpl extends DefaultVisitor {
 	@Override
 	public Object visit(Parameter parameter, Object param) {
 
-		// parameter.getType().accept(this, param);
-		super.visit(parameter, param);
+		System.out.print(parameter.getName() + ":");
+
+		parameter.getType().accept(this, param);
 
 		return null;
 	}
@@ -128,8 +129,11 @@ public class VisitorImpl extends DefaultVisitor {
 	@Override
 	public Object visit(Print print, Object param) {
 
-		// print.getExpression().accept(this, param);
-		super.visit(print, param);
+		System.out.print("print ");
+
+		print.getExpression().accept(this, param);
+
+		System.out.println(";");
 
 		return null;
 	}
@@ -138,8 +142,11 @@ public class VisitorImpl extends DefaultVisitor {
 	@Override
 	public Object visit(Read read, Object param) {
 
-		// read.getExpression().accept(this, param);
-		super.visit(read, param);
+		System.out.print("read ");
+
+		read.getExpression().accept(this, param);
+
+		System.out.println(";");
 
 		return null;
 	}
@@ -148,8 +155,9 @@ public class VisitorImpl extends DefaultVisitor {
 	@Override
 	public Object visit(Call call, Object param) {
 
-		// call.getExpression().accept(this, param);
-		super.visit(call, param);
+		call.getExpression().accept(this, param);
+
+		System.out.println(";");
 
 		return null;
 	}
@@ -158,9 +166,13 @@ public class VisitorImpl extends DefaultVisitor {
 	@Override
 	public Object visit(Assignment assignment, Object param) {
 
-		// assignment.getLeft().accept(this, param);
-		// assignment.getRight().accept(this, param);
-		super.visit(assignment, param);
+		assignment.getLeft().accept(this, param);
+
+		System.out.print(" = ");
+
+		assignment.getRight().accept(this, param);
+
+		System.out.println(";");
 
 		return null;
 	}
@@ -169,11 +181,22 @@ public class VisitorImpl extends DefaultVisitor {
 	@Override
 	public Object visit(Conditional conditional, Object param) {
 
-		// conditional.getExpression().accept(this, param);
-		// conditional.getIfStatements().forEach(statement -> statement.accept(this, param));
-		// conditional.getElseStatements().forEach(statement -> statement.accept(this, param));
-		super.visit(conditional, param);
+		System.out.print("if (");
 
+		conditional.getExpression().accept(this, param);
+
+		System.out.println(") {");
+
+		conditional.getIfStatements().forEach(statement -> statement.accept(this, param));
+
+		System.out.println("}");
+
+		System.out.println("else {");
+
+		conditional.getElseStatements().forEach(statement -> statement.accept(this, param));
+
+		System.out.println("}");
+		
 		return null;
 	}
 
@@ -181,9 +204,15 @@ public class VisitorImpl extends DefaultVisitor {
 	@Override
 	public Object visit(While whileValue, Object param) {
 
-		// whileValue.getExpression().accept(this, param);
-		// whileValue.getLoopStatements().forEach(statement -> statement.accept(this, param));
-		super.visit(whileValue, param);
+		System.out.print("while (");
+
+		whileValue.getExpression().accept(this, param);
+
+		System.out.println(") {");
+
+		whileValue.getLoopStatements().forEach(statement -> statement.accept(this, param));
+
+		System.out.println("}");
 
 		return null;
 	}
@@ -192,8 +221,11 @@ public class VisitorImpl extends DefaultVisitor {
 	@Override
 	public Object visit(Return returnValue, Object param) {
 
-		// returnValue.getExpression().ifPresent(expression -> expression.accept(this, param));
-		super.visit(returnValue, param);
+		System.out.print("return ");
+
+		returnValue.getExpression().ifPresent(expression -> expression.accept(this, param));
+
+		System.out.println(";");
 
 		return null;
 	}
@@ -201,14 +233,18 @@ public class VisitorImpl extends DefaultVisitor {
 	// class IntType()
 	@Override
 	public Object visit(IntType intType, Object param) {
+		
 		System.out.print(" int");
+		
 		return null;
 	}
 
 	// class FloatType()
 	@Override
 	public Object visit(FloatType floatType, Object param) {
+		
 		System.out.print(" float");
+		
 		return null;
 	}
 
@@ -217,6 +253,7 @@ public class VisitorImpl extends DefaultVisitor {
 	public Object visit(CharType charType, Object param) {
 
 		System.out.print(" char");
+		
 		return null;
 	}
 
@@ -242,6 +279,8 @@ public class VisitorImpl extends DefaultVisitor {
 	@Override
 	public Object visit(Variable variable, Object param) {
 
+		System.out.print(variable.getName());
+		
 		return null;
 	}
 
@@ -249,12 +288,16 @@ public class VisitorImpl extends DefaultVisitor {
 	@Override
 	public Object visit(IntLiteral intLiteral, Object param) {
 
+		System.out.print(intLiteral.getIntValue());
+
 		return null;
 	}
 
 	// class FloatLiteral(float floatValue)
 	@Override
 	public Object visit(FloatLiteral floatLiteral, Object param) {
+
+		System.out.print(floatLiteral.getFloatValue());
 
 		return null;
 	}
@@ -264,6 +307,7 @@ public class VisitorImpl extends DefaultVisitor {
 	public Object visit(CharLiteral charLiteral, Object param) {
 
 		// String Type, should implement a getCharacter method or something idk
+		System.out.print(charLiteral.getCharValue());
 
 		return null;
 	}
@@ -296,9 +340,13 @@ public class VisitorImpl extends DefaultVisitor {
 	@Override
 	public Object visit(ArrayAccess arrayAccess, Object param) {
 
-		// arrayAccess.getLeft().accept(this, param);
-		// arrayAccess.getRight().accept(this, param);
-		super.visit(arrayAccess, param);
+		arrayAccess.getLeft().accept(this, param);
+
+		System.out.print("[");
+
+		arrayAccess.getRight().accept(this, param);
+
+		System.out.print("]");
 
 		return null;
 	}
@@ -307,9 +355,15 @@ public class VisitorImpl extends DefaultVisitor {
 	@Override
 	public Object visit(Cast cast, Object param) {
 
-		// cast.getType().accept(this, param);
-		// cast.getExpression().accept(this, param);
-		super.visit(cast, param);
+		System.out.print("<");
+		cast.getType().accept(this, param);
+		System.out.print(">");
+
+		System.out.print("(");
+
+		cast.getExpression().accept(this, param);
+
+		System.out.print(")");
 
 		return null;
 	}
@@ -318,9 +372,11 @@ public class VisitorImpl extends DefaultVisitor {
 	@Override
 	public Object visit(Arithmetic arithmetic, Object param) {
 
-		// arithmetic.getLeft().accept(this, param);
-		// arithmetic.getRight().accept(this, param);
-		super.visit(arithmetic, param);
+		arithmetic.getLeft().accept(this, param);
+
+		System.out.print(arithmetic.getOperator());
+
+		arithmetic.getRight().accept(this, param);
 
 		return null;
 	}
@@ -329,9 +385,11 @@ public class VisitorImpl extends DefaultVisitor {
 	@Override
 	public Object visit(Logic logic, Object param) {
 
-		// logic.getLeft().accept(this, param);
-		// logic.getRight().accept(this, param);
-		super.visit(logic, param);
+		logic.getLeft().accept(this, param);
+
+		System.out.print(logic.getOperator());
+
+		logic.getRight().accept(this, param);
 
 		return null;
 	}
@@ -340,9 +398,11 @@ public class VisitorImpl extends DefaultVisitor {
 	@Override
 	public Object visit(LogicAnd logicAnd, Object param) {
 
-		// logicAnd.getLeft().accept(this, param);
-		// logicAnd.getRight().accept(this, param);
-		super.visit(logicAnd, param);
+		logicAnd.getLeft().accept(this, param);
+
+		System.out.print("&&");
+
+		logicAnd.getRight().accept(this, param);
 
 		return null;
 	}
@@ -351,9 +411,11 @@ public class VisitorImpl extends DefaultVisitor {
 	@Override
 	public Object visit(LogicOr logicOr, Object param) {
 
-		// logicOr.getLeft().accept(this, param);
-		// logicOr.getRight().accept(this, param);
-		super.visit(logicOr, param);
+		logicOr.getLeft().accept(this, param);
+
+		System.out.print("||");
+
+		logicOr.getRight().accept(this, param);
 
 		return null;
 	}
@@ -362,8 +424,8 @@ public class VisitorImpl extends DefaultVisitor {
 	@Override
 	public Object visit(LogicNot logicNot, Object param) {
 
-		// logicNot.getExpression().accept(this, param);
-		super.visit(logicNot, param);
+		System.out.print("!");
+		logicNot.getExpression().accept(this, param);
 
 		return null;
 	}

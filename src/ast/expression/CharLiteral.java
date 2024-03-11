@@ -21,12 +21,12 @@ public class CharLiteral extends AbstractExpression  {
     // Instance Variables
 
 	// charLiteral: expression -> char
-	private char charValue;
+	private String charValue;
 
     // ----------------------------------
     // Constructors
 
-	public CharLiteral(char charValue) {
+	public CharLiteral(String charValue) {
 		super();
 
 		this.charValue = charValue;
@@ -43,8 +43,8 @@ public class CharLiteral extends AbstractExpression  {
         if (charValue_temp instanceof Token)
             charValue_temp = ((Token) charValue_temp).getText();
         if (charValue_temp instanceof String)
-            charValue_temp = ((String) charValue_temp).charAt(0);
-        this.charValue = (char) charValue_temp;
+            charValue_temp = ((String) charValue_temp);
+        this.charValue = (String) charValue_temp;
 
 		updatePositions(charValue);
 	}
@@ -55,12 +55,12 @@ public class CharLiteral extends AbstractExpression  {
 
 	// Child 'char' 
 
-	public void setCharValue(char charValue) {
+	public void setCharValue(String charValue) {
 		this.charValue = charValue;
 
 	}
 
-    public char getCharValue() {
+    public String getCharValue() {
         return charValue;
     }
 
