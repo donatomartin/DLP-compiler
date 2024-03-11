@@ -618,7 +618,6 @@ public class GrammarParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class StatementContext extends ParserRuleContext {
 		public Statement ast;
-		public ExpressionContext expression;
 		public ExpressionContext e;
 		public ExpressionContext left;
 		public ExpressionContext right;
@@ -666,10 +665,10 @@ public class GrammarParser extends Parser {
 					consume();
 				}
 				setState(125);
-				((StatementContext)_localctx).expression = expression(0);
+				((StatementContext)_localctx).e = expression(0);
 				setState(126);
 				match(T__2);
-				 ((StatementContext)_localctx).ast =  new Print(((StatementContext)_localctx).expression.ast); 
+				 ((StatementContext)_localctx).ast =  new Print(((StatementContext)_localctx).e.ast); 
 				}
 				break;
 			case 2:
@@ -678,10 +677,10 @@ public class GrammarParser extends Parser {
 				setState(129);
 				match(T__12);
 				setState(130);
-				((StatementContext)_localctx).expression = expression(0);
+				((StatementContext)_localctx).e = expression(0);
 				setState(131);
 				match(T__2);
-				 ((StatementContext)_localctx).ast =  new Read(((StatementContext)_localctx).expression.ast); 
+				 ((StatementContext)_localctx).ast =  new Read(((StatementContext)_localctx).e.ast); 
 				}
 				break;
 			case 3:

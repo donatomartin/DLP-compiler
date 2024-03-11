@@ -42,8 +42,8 @@ parameter returns [Parameter ast]
 	;
 
 statement returns [Statement ast]
-	: ('print'|'printsp' | 'println') expression ';' { $ast = new Print($expression.ast); }
-	| 'read' expression ';' { $ast = new Read($expression.ast); }
+	: ('print'|'printsp' | 'println') e=expression ';' { $ast = new Print($e.ast); }
+	| 'read' e=expression ';' { $ast = new Read($e.ast); }
 	| e=expression ';' { $ast = new Call($e.ast); }
 	| left=expression '=' right=expression ';' { $ast = new Assignment($left.ast, $right.ast); }
 	| 'if' '(' e=expression ')' '{' ifStatements+=statement* '}' 'else' '{' elseStatements+=statement* '}' { $ast = new Conditional($e.ast, $ifStatements, $elseStatements); }
