@@ -12,7 +12,7 @@ import visitor.Visitor;
 // %% -------------------------------
 
 /*
-	structAccess: expression -> e:expression name:string
+	structAccess: expression -> expression:expression name:string
 	expression -> 
 */
 public class StructAccess extends AbstractExpression  {
@@ -20,56 +20,56 @@ public class StructAccess extends AbstractExpression  {
     // ----------------------------------
     // Instance Variables
 
-	// structAccess: expression -> e:expression string
-	private Expression e;
+	// structAccess: expression -> expression string
+	private Expression expression;
 	private String name;
 
     // ----------------------------------
     // Constructors
 
-	public StructAccess(Expression e, String name) {
+	public StructAccess(Expression expression, String name) {
 		super();
 
-		if (e == null)
-			throw new IllegalArgumentException("Parameter 'e' can't be null. Pass a non-null value or use 'expression?' in the abstract grammar");
-		this.e = e;
+		if (expression == null)
+			throw new IllegalArgumentException("Parameter 'expression' can't be null. Pass a non-null value or use 'expression?' in the abstract grammar");
+		this.expression = expression;
 
 		if (name == null)
 			throw new IllegalArgumentException("Parameter 'name' can't be null. Pass a non-null value or use 'string?' in the abstract grammar");
 		this.name = name;
 
-		updatePositions(e, name);
+		updatePositions(expression, name);
 	}
 
-	public StructAccess(Object e, Object name) {
+	public StructAccess(Object expression, Object name) {
 		super();
 
-        if (e == null)
-            throw new IllegalArgumentException("Parameter 'e' can't be null. Pass a non-null value or use 'expression?' in the abstract grammar");
-		this.e = (Expression) e;
+        if (expression == null)
+            throw new IllegalArgumentException("Parameter 'expression' can't be null. Pass a non-null value or use 'expression?' in the abstract grammar");
+		this.expression = (Expression) expression;
 
         if (name == null)
             throw new IllegalArgumentException("Parameter 'name' can't be null. Pass a non-null value or use 'string?' in the abstract grammar");
 		this.name = (name instanceof Token) ? ((Token) name).getText() : (String) name;
 
-		updatePositions(e, name);
+		updatePositions(expression, name);
 	}
 
 
     // ----------------------------------
-    // structAccess: expression -> e:expression string
+    // structAccess: expression -> expression string
 
-	// Child 'e:expression' 
+	// Child 'expression' 
 
-	public void setE(Expression e) {
-		if (e == null)
-			throw new IllegalArgumentException("Parameter 'e' can't be null. Pass a non-null value or use 'expression?' in the abstract grammar");
-		this.e = e;
+	public void setExpression(Expression expression) {
+		if (expression == null)
+			throw new IllegalArgumentException("Parameter 'expression' can't be null. Pass a non-null value or use 'expression?' in the abstract grammar");
+		this.expression = expression;
 
 	}
 
-    public Expression getE() {
-        return e;
+    public Expression getExpression() {
+        return expression;
     }
 
 
@@ -97,7 +97,7 @@ public class StructAccess extends AbstractExpression  {
 
     @Override
     public String toString() {
-        return "StructAccess{" + " e=" + this.getE() + " name=" + this.getName() + "}";
+        return "StructAccess{" + " expression=" + this.getExpression() + " name=" + this.getName() + "}";
     }
 
 

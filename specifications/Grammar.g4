@@ -33,18 +33,18 @@ field returns [Field ast]
 	: IDENT ':' type ';' { $ast = new Field($IDENT, $type.ast); }
 	;
 
-parameters returns [List<Parameter> list = new ArrayList<Parameter>()]
+parameters returns [List<VarDefinition> list = new ArrayList<VarDefinition>()]
 	: (p1=parameter { $list.add($p1.ast); } (',' p2=parameter {$list.add($p2.ast);} )*)? 
 	;
 
-parameter returns [Parameter ast]
-	: IDENT ':' type { $ast = new Parameter($IDENT, $type.ast); }
+parameter returns [VarDefinition ast]
+	: IDENT ':' type { $ast = new VarDefinition($IDENT, $type.ast); }
 	;
 
 statement returns [Statement ast]
 	: ('print'|'printsp' | 'println') e=expression ';' { $ast = new Print($e.ast); }
 	| 'read' e=expression ';' { $ast = new Read($e.ast); }
-	| e=expression ';' { $ast = new Call($e.ast); }
+	| IDENT '(' (arguments+=expression (',' arguments+=expression )*)?  ')' { $ast = new FunctionCallStatement($IDENT, $arguments); }
 	| left=expression '=' right=expression ';' { $ast = new Assignment($left.ast, $right.ast); }
 	| 'if' '(' e=expression ')' '{' ifStatements+=statement* '}' 'else' '{' elseStatements+=statement* '}' { $ast = new Conditional($e.ast, $ifStatements, $elseStatements); }
 	| 'if' '(' e=expression ')' '{' ifStatements+=statement* '}'  { $ast = new Conditional($e.ast, $ifStatements, null); }
@@ -58,7 +58,7 @@ expression returns [Expression ast]
 	| INT_LITERAL { $ast = new IntLiteral($INT_LITERAL); }
 	| FLOAT_LITERAL { $ast = new FloatLiteral($FLOAT_LITERAL); }
 	| CHAR_LITERAL { $ast = new CharLiteral($CHAR_LITERAL); }
-	| IDENT '(' (arguments+=expression (',' arguments+=expression )*)?  ')' { $ast = new FunctionCall($IDENT, $arguments); }
+	| IDENT '(' (arguments+=expression (',' arguments+=expression )*)?  ')' { $ast = new FunctionCallExpression($IDENT, $arguments); }
 	| e=expression '.' IDENT { $ast = new StructAccess($e.ast, $IDENT); }
 	| left=expression '[' right=expression ']' { $ast = new ArrayAccess($left.ast, $right.ast); }
 	| '(' expression ')' { $ast = $expression.ast; }

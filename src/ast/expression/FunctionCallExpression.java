@@ -2,6 +2,7 @@
 
 package ast.expression;
 
+import ast.definition.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Stream;
@@ -15,22 +16,28 @@ import visitor.Visitor;
 // %% -------------------------------
 
 /*
-	functionCall: expression -> name:string expressions:expression*
+	functionCallExpression: expression -> name:string expressions:expression*
 	expression -> 
+	
+	PHASE Identification
+	functionCallExpression -> functionDefinition:functionDefinition
 */
-public class FunctionCall extends AbstractExpression  {
+public class FunctionCallExpression extends AbstractExpression  {
 
     // ----------------------------------
     // Instance Variables
 
-	// functionCall: expression -> string expression*
+	// functionCallExpression: expression -> string expression*
 	private String name;
 	private List<Expression> expressions;
+
+    // PHASE Identification
+	private FunctionDefinition functionDefinition;
 
     // ----------------------------------
     // Constructors
 
-	public FunctionCall(String name, List<Expression> expressions) {
+	public FunctionCallExpression(String name, List<Expression> expressions) {
 		super();
 
 		if (name == null)
@@ -44,7 +51,7 @@ public class FunctionCall extends AbstractExpression  {
 		updatePositions(name, expressions);
 	}
 
-	public FunctionCall(Object name, Object expressions) {
+	public FunctionCallExpression(Object name, Object expressions) {
 		super();
 
         if (name == null)
@@ -57,7 +64,7 @@ public class FunctionCall extends AbstractExpression  {
 
 
     // ----------------------------------
-    // functionCall: expression -> string expression*
+    // functionCallExpression: expression -> string expression*
 
 	// Child 'string' 
 
@@ -91,6 +98,24 @@ public class FunctionCall extends AbstractExpression  {
     }
 
 
+
+    // --------------------------------
+    // PHASE Identification
+
+	// Attribute 'functionDefinition' 
+
+	public void setFunctionDefinition(FunctionDefinition functionDefinition) {
+		if (functionDefinition == null)
+			throw new IllegalArgumentException("Parameter 'functionDefinition' can't be null. Pass a non-null value or use 'functionDefinition?' in the abstract grammar");
+		this.functionDefinition = functionDefinition;
+
+	}
+
+    public FunctionDefinition getFunctionDefinition() {
+        return functionDefinition;
+    }
+
+
     // ----------------------------------
     // Helper methods
 
@@ -101,7 +126,7 @@ public class FunctionCall extends AbstractExpression  {
 
     @Override
     public String toString() {
-        return "FunctionCall{" + " name=" + this.getName() + " expressions=" + this.getExpressions() + "}";
+        return "FunctionCallExpression{" + " name=" + this.getName() + " expressions=" + this.getExpressions() + "}";
     }
 
 

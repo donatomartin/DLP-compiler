@@ -11,14 +11,13 @@ program -> definition*;
 
 varDefinition:definition -> string type;
 structDefinition:definition -> string field*;
-functionDefinition:definition -> string parameter* type? definition* statement*;
+functionDefinition:definition -> string varDefinition* type? definition* statement*;
 
 field -> string type;
-parameter -> string type;
 
 print:statement -> expression;
 read:statement -> expression;
-call:statement -> expression;
+functionCallStatement:statement -> string expression*;
 assignment:statement -> left:expression right:expression;
 conditional:statement -> expression ifStatements:statement* elseStatements:statement*;
 while:statement -> expression loopStatements:statement*;
@@ -34,8 +33,8 @@ variable:expression -> string;
 intLiteral:expression -> int;
 floatLiteral:expression -> float;
 charLiteral:expression -> char;
-functionCall:expression -> string expression*;
-structAccess:expression -> e:expression string;
+functionCallExpression:expression -> string expression*;
+structAccess:expression -> expression string;
 arrayAccess:expression -> left:expression right:expression;
 cast:expression -> type expression;
 arithmetic:expression -> left:expression operator:string right:expression;
@@ -43,3 +42,10 @@ Logic:expression -> left:expression operator:string right:expression;
 logicAnd:expression -> left:expression right:expression;
 logicOr:expression -> left:expression right:expression;
 logicNot:expression -> expression;
+
+ATTRIBUTE GRAMMAR Identification
+
+variable -> varDefinition;
+functionCallStatement -> functionDefinition;
+functionCallExpression -> functionDefinition;
+structType -> structDefinition;

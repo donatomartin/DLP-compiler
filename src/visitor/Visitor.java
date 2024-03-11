@@ -26,13 +26,11 @@ public interface Visitor {
 
 	public Object visit(Field field, Object param);
 
-	public Object visit(Parameter parameter, Object param);
-
 	public Object visit(Print print, Object param);
 
 	public Object visit(Read read, Object param);
 
-	public Object visit(Call call, Object param);
+	public Object visit(FunctionCallStatement functionCallStatement, Object param);
 
 	public Object visit(Assignment assignment, Object param);
 
@@ -60,7 +58,7 @@ public interface Visitor {
 
 	public Object visit(CharLiteral charLiteral, Object param);
 
-	public Object visit(FunctionCall functionCall, Object param);
+	public Object visit(FunctionCallExpression functionCallExpression, Object param);
 
 	public Object visit(StructAccess structAccess, Object param);
 

@@ -128,19 +128,13 @@
         </tr>
 
         <tr>
-            <td><span class="symbol-name">functionDefinition</span><span class="parents">:definition</span> &rarr; <span class="att-name">name</span>:<span class="att-type">string</span> <span class="att-type">parameter*</span> <span class="att-type">type?</span> <span class="att-type">definition*</span> <span class="att-type">statement*</span></td>
+            <td><span class="symbol-name">functionDefinition</span><span class="parents">:definition</span> &rarr; <span class="att-name">name</span>:<span class="att-type">string</span> <span class="att-type">varDefinition*</span> <span class="att-type">type?</span> <span class="att-type">definition*</span> <span class="att-type">statement*</span></td>
             <td></td>
             <td></td>
         </tr>
 
         <tr>
             <td><span class="symbol-name">field</span> &rarr; <span class="att-name">name</span>:<span class="att-type">string</span> <span class="att-type">type</span></td>
-            <td></td>
-            <td></td>
-        </tr>
-
-        <tr>
-            <td><span class="symbol-name">parameter</span> &rarr; <span class="att-name">name</span>:<span class="att-type">string</span> <span class="att-type">type</span></td>
             <td></td>
             <td></td>
         </tr>
@@ -158,7 +152,7 @@
         </tr>
 
         <tr>
-            <td><span class="symbol-name">call</span><span class="parents">:statement</span> &rarr; <span class="att-type">expression</span></td>
+            <td><span class="symbol-name">functionCallStatement</span><span class="parents">:statement</span> &rarr; <span class="att-name">name</span>:<span class="att-type">string</span> <span class="att-type">expression*</span></td>
             <td></td>
             <td></td>
         </tr>
@@ -242,13 +236,13 @@
         </tr>
 
         <tr>
-            <td><span class="symbol-name">functionCall</span><span class="parents">:expression</span> &rarr; <span class="att-name">name</span>:<span class="att-type">string</span> <span class="att-type">expression*</span></td>
+            <td><span class="symbol-name">functionCallExpression</span><span class="parents">:expression</span> &rarr; <span class="att-name">name</span>:<span class="att-type">string</span> <span class="att-type">expression*</span></td>
             <td></td>
             <td></td>
         </tr>
 
         <tr>
-            <td><span class="symbol-name">structAccess</span><span class="parents">:expression</span> &rarr; <span class="att-name">e</span>:<span class="att-type">expression</span> <span class="att-name">name</span>:<span class="att-type">string</span></td>
+            <td><span class="symbol-name">structAccess</span><span class="parents">:expression</span> &rarr; <span class="att-type">expression</span> <span class="att-name">name</span>:<span class="att-type">string</span></td>
             <td></td>
             <td></td>
         </tr>

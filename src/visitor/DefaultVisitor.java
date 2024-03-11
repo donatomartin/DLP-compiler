@@ -49,7 +49,7 @@ public class DefaultVisitor implements Visitor {
 	@Override
 	public Object visit(FunctionDefinition functionDefinition, Object param) {
 
-		functionDefinition.getParameters().forEach(parameter -> parameter.accept(this, param));
+		functionDefinition.getVarDefinitions().forEach(varDefinition -> varDefinition.accept(this, param));
 		functionDefinition.getType().ifPresent(type -> type.accept(this, param));
 		functionDefinition.getDefinitions().forEach(definition -> definition.accept(this, param));
 		functionDefinition.getStatements().forEach(statement -> statement.accept(this, param));
@@ -60,13 +60,6 @@ public class DefaultVisitor implements Visitor {
 	public Object visit(Field field, Object param) {
 
 		field.getType().accept(this, param);
-		return null;
-	}
-
-	@Override
-	public Object visit(Parameter parameter, Object param) {
-
-		parameter.getType().accept(this, param);
 		return null;
 	}
 
@@ -85,9 +78,9 @@ public class DefaultVisitor implements Visitor {
 	}
 
 	@Override
-	public Object visit(Call call, Object param) {
+	public Object visit(FunctionCallStatement functionCallStatement, Object param) {
 
-		call.getExpression().accept(this, param);
+		functionCallStatement.getExpressions().forEach(expression -> expression.accept(this, param));
 		return null;
 	}
 
@@ -179,16 +172,16 @@ public class DefaultVisitor implements Visitor {
 	}
 
 	@Override
-	public Object visit(FunctionCall functionCall, Object param) {
+	public Object visit(FunctionCallExpression functionCallExpression, Object param) {
 
-		functionCall.getExpressions().forEach(expression -> expression.accept(this, param));
+		functionCallExpression.getExpressions().forEach(expression -> expression.accept(this, param));
 		return null;
 	}
 
 	@Override
 	public Object visit(StructAccess structAccess, Object param) {
 
-		structAccess.getE().accept(this, param);
+		structAccess.getExpression().accept(this, param);
 		return null;
 	}
 

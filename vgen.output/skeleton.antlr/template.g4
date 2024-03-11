@@ -17,7 +17,7 @@ program returns[Program ast]
 definition returns[Definition ast]
     : name=IDENT type                     { $ast = new VarDefinition($name, $type.ast); }        
     | name=IDENT fields+=field*           { $ast = new StructDefinition($name, $fields); }       
-    | name=IDENT parameters+=parameter* type? definitions+=definition* statements+=statement* { $ast = new FunctionDefinition($name, $parameters, ($type.ctx == null) ? null : $type.ast, $definitions, $statements); }
+    | name=IDENT varDefinitions+=varDefinition* type? definitions+=definition* statements+=statement* { $ast = new FunctionDefinition($name, $varDefinitions, ($type.ctx == null) ? null : $type.ast, $definitions, $statements); }
 	;
 
 type returns[Type ast]
@@ -32,14 +32,14 @@ field returns[Field ast]
     : name=IDENT type                     { $ast = new Field($name, $type.ast); }                
 	;
 
-parameter returns[Parameter ast]
-    : name=IDENT type                     { $ast = new Parameter($name, $type.ast); }            
+varDefinition returns[VarDefinition ast]
+    : name=IDENT type                     { $ast = new VarDefinition($name, $type.ast); }        
 	;
 
 statement returns[Statement ast]
     : expression                          { $ast = new Print($expression.ast); }                 
     | expression                          { $ast = new Read($expression.ast); }                  
-    | expression                          { $ast = new Call($expression.ast); }                  
+    | name=IDENT expressions+=expression* { $ast = new FunctionCallStatement($name, $expressions); }
     | left=expression right=expression    { $ast = new Assignment($left.ast, $right.ast); }      
     | expression ifStatements+=statement* elseStatements+=statement* { $ast = new Conditional($expression.ast, $ifStatements, $elseStatements); }
     | expression loopStatements+=statement* { $ast = new While($expression.ast, $loopStatements); }
@@ -51,7 +51,7 @@ expression returns[Expression ast]
     | INT_LITERAL                         { $ast = new IntLiteral($INT_LITERAL); }               
     | FLOAT_LITERAL                       { $ast = new FloatLiteral($FLOAT_LITERAL); }           
     | CHAR_LITERAL                        { $ast = new CharLiteral($CHAR_LITERAL); }             
-    | name=IDENT expressions+=expression* { $ast = new FunctionCall($name, $expressions); }      
+    | name=IDENT expressions+=expression* { $ast = new FunctionCallExpression($name, $expressions); }
     | expression name=IDENT               { $ast = new StructAccess($expression.ast, $name); }   
     | left=expression right=expression    { $ast = new ArrayAccess($left.ast, $right.ast); }     
     | type expression                     { $ast = new Cast($type.ast, $expression.ast); }       
