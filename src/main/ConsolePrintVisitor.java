@@ -29,7 +29,7 @@ import ast.type.*;
 import ast.expression.*;
 
 
-public class VisitorImpl extends DefaultVisitor {
+public class ConsolePrintVisitor extends DefaultVisitor {
 
     public void process(AST ast) {
         ast.accept(this, null);
@@ -191,12 +191,16 @@ public class VisitorImpl extends DefaultVisitor {
 
 		System.out.println("}");
 
-		System.out.println("else {");
+		if (conditional.getElseStatements().size() > 0) {
 
-		conditional.getElseStatements().forEach(statement -> statement.accept(this, param));
+			System.out.println("else {");
 
-		System.out.println("}");
-		
+			conditional.getElseStatements().forEach(statement -> statement.accept(this, param));
+	
+			System.out.println("}");
+
+		}
+
 		return null;
 	}
 
