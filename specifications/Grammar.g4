@@ -58,7 +58,7 @@ expression returns [Expression ast]
 	| INT_LITERAL { $ast = new IntLiteral($INT_LITERAL); }
 	| FLOAT_LITERAL { $ast = new FloatLiteral($FLOAT_LITERAL); }
 	| CHAR_LITERAL { $ast = new CharLiteral($CHAR_LITERAL); }
-	| IDENT '(' arguments ')' { $ast = new FunctionCall($IDENT, $arguments.list); }
+	| IDENT '(' (arguments+=expression (',' arguments+=expression )*)?  ')' { $ast = new FunctionCall($IDENT, $arguments); }
 	| e=expression '.' IDENT { $ast = new StructAccess($e.ast, $IDENT); }
 	| left=expression '[' right=expression ']' { $ast = new ArrayAccess($left.ast, $right.ast); }
 	| '(' expression ')' { $ast = $expression.ast; }
@@ -70,10 +70,6 @@ expression returns [Expression ast]
 	| left=expression operator=('!='|'==') right=expression { $ast = new Logic($left.ast, $operator, $right.ast); }
 	| left=expression '&&' right=expression { $ast = new LogicAnd($left.ast, $right.ast); }
 	| left=expression '||' right=expression { $ast = new LogicOr($left.ast, $right.ast); }
-	;
-
-arguments returns [List<Expression> list = new ArrayList<Expression>()]
-	: (e1=expression { $list.add($e1.ast); } (',' e2=expression {$list.add($e2.ast);} )*)? 
 	;
 
 type returns [Type ast]
