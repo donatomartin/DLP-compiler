@@ -1,6 +1,10 @@
 package semantic;
 
 import visitor.DefaultVisitor;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import ast.*;
 import ast.definition.*;
 import ast.statement.*;
@@ -14,6 +18,11 @@ public class Identification extends DefaultVisitor {
 
     private ErrorManager errorManager;
 
+	private Map<String, FunctionDefinition> functionDefinitions = new HashMap<>();
+	private Map<String, VarDefinition> varDefinitions = new HashMap<>();
+	private Map<String, StructDefinition> structDefinitions = new HashMap<>();
+	private Map<String, Field> fieldDefinitions = new HashMap<>();
+
     public Identification(ErrorManager errorManager) {
         this.errorManager = errorManager;
     }
@@ -24,77 +33,40 @@ public class Identification extends DefaultVisitor {
 
     // Visit Methods --------------------------------------------------------------
 
+	// class FunctionDefinition(String name, List<VarDefinition> varDefinitions, Optional<Type> type, List<Definition> definitions, List<Statement> statements)
+	@Override
+	public Object visit(FunctionDefinition functionDefinition, Object param) {
+
+		if (functionDefinitions.containsKey(functionDefinition.getName())) {
+			notifyError("Function " + functionDefinition.getName() + " already defined", functionDefinition);
+			return null;
+		}
+
+		functionDefinitions.put(functionDefinition.getName(), functionDefinition);
+
+		functionDefinition.getVarDefinitions().forEach(varDefinition -> varDefinition.accept(this, param));
+		functionDefinition.getType().ifPresent(type -> type.accept(this, param));
+		functionDefinition.getDefinitions().forEach(definition -> definition.accept(this, param));
+		functionDefinition.getStatements().forEach(statement -> statement.accept(this, param));
+
+		return null;
+	}
+
 	// class FunctionCallStatement(String name, List<Expression> expressions)
 	// phase Identification { FunctionDefinition functionDefinition }
 	@Override
 	public Object visit(FunctionCallStatement functionCallStatement, Object param) {
 
-		// functionCallStatement.getExpressions().forEach(expression -> expression.accept(this, param));
-		super.visit(functionCallStatement, param);
+		FunctionDefinition functionDefinition = functionDefinitions.get(functionCallStatement.getName());
+		
+		if (functionDefinition == null) {
+			notifyError("Function " + functionCallStatement.getName() + " not defined", functionCallStatement);
+			return null;
+		}
 
-		// TODO: Remember to initialize SYNTHESIZED attributes <-----
-		// functionCallStatement.setFunctionDefinition(?);
-		return null;
-	}
+		functionCallStatement.setFunctionDefinition(functionDefinition);
 
-	// class IntType()
-	@Override
-	public Object visit(IntType intType, Object param) {
-
-		return null;
-	}
-
-	// class FloatType()
-	@Override
-	public Object visit(FloatType floatType, Object param) {
-
-		return null;
-	}
-
-	// class CharType()
-	@Override
-	public Object visit(CharType charType, Object param) {
-
-		return null;
-	}
-
-	// class StructType(String name)
-	// phase Identification { StructDefinition structDefinition }
-	@Override
-	public Object visit(StructType structType, Object param) {
-
-		// TODO: Remember to initialize SYNTHESIZED attributes <-----
-		// structType.setStructDefinition(?);
-		return null;
-	}
-
-	// class Variable(String name)
-	// phase Identification { VarDefinition varDefinition }
-	@Override
-	public Object visit(Variable variable, Object param) {
-
-		// TODO: Remember to initialize SYNTHESIZED attributes <-----
-		// variable.setVarDefinition(?);
-		return null;
-	}
-
-	// class IntLiteral(int intValue)
-	@Override
-	public Object visit(IntLiteral intLiteral, Object param) {
-
-		return null;
-	}
-
-	// class FloatLiteral(float floatValue)
-	@Override
-	public Object visit(FloatLiteral floatLiteral, Object param) {
-
-		return null;
-	}
-
-	// class CharLiteral(char charValue)
-	@Override
-	public Object visit(CharLiteral charLiteral, Object param) {
+		functionCallStatement.getExpressions().forEach(expression -> expression.accept(this, param));
 
 		return null;
 	}
@@ -104,27 +76,122 @@ public class Identification extends DefaultVisitor {
 	@Override
 	public Object visit(FunctionCallExpression functionCallExpression, Object param) {
 
-		// functionCallExpression.getExpressions().forEach(expression -> expression.accept(this, param));
-		super.visit(functionCallExpression, param);
+		FunctionDefinition functionDefinition = functionDefinitions.get(functionCallExpression.getName());
+		
+		if (functionDefinition == null) {
+			notifyError("Function " + functionCallExpression.getName() + " not defined", functionCallExpression);
+			return null;
+		}
 
-		// TODO: Remember to initialize SYNTHESIZED attributes <-----
-		// functionCallExpression.setFunctionDefinition(?);
+		functionCallExpression.setFunctionDefinition(functionDefinition);
+
+		functionCallExpression.getExpressions().forEach(expression -> expression.accept(this, param));
+
 		return null;
 	}
 
-    // # --------------------------------------------------------
-    // Métodos auxiliares recomendados (opcionales) -------------
+	// class StructDefinition(String name, List<Field> fields)
+	@Override
+	public Object visit(StructDefinition structDefinition, Object param) {
 
-    private void notifyError(String msg) {
-        errorManager.notify("Identification", msg);
-    }
+		if (structDefinitions.containsKey(structDefinition.getName())) {
+			notifyError("Struct " + structDefinition.getName() + " already defined", structDefinition);
+			return null;
+		}
+
+		structDefinitions.put(structDefinition.getName(), structDefinition);
+
+		structDefinition.getFields().forEach(field -> field.accept(this, param));
+
+		return null;
+	}
+
+	// class StructType(String name)
+	// phase Identification { StructDefinition structDefinition }
+	@Override
+	public Object visit(StructType structType, Object param) {
+
+		StructDefinition structDefinition = structDefinitions.get(structType.getName());
+
+		if (structDefinition == null) {
+			notifyError("Struct " + structType.getName() + " not defined", structType);
+			return null;
+		}
+
+		structType.setStructDefinition(structDefinition);
+
+		return null;
+	}
+
+	// class Field(String name, Type type)
+	@Override
+	public Object visit(Field field, Object param) {
+
+		if (fieldDefinitions.containsKey(field.getName())) {
+			notifyError("Field " + field.getName() + " already defined", field);
+			return null;
+		}
+
+		fieldDefinitions.put(field.getName(), field);
+
+		return null;
+	}
+
+	// class StructAccess(Expression expression, String name)
+	@Override
+	public Object visit(StructAccess structAccess, Object param) {
+
+		structAccess.getExpression().accept(this, param);
+
+		return null;
+	}
+
+	// class VarDefinition(String name, Type type)
+	@Override
+	public Object visit(VarDefinition varDefinition, Object param) {
+
+		if (varDefinitions.containsKey(varDefinition.getName())) {
+			notifyError("Variable " + varDefinition.getName() + " already defined", varDefinition);
+			return null;
+		}
+
+		varDefinitions.put(varDefinition.getName(), varDefinition);
+
+		return null;
+	}
+
+	// class Variable(String name)
+	// phase Identification { VarDefinition varDefinition }
+	@Override
+	public Object visit(Variable variable, Object param) {
+
+		VarDefinition varDefinition = varDefinitions.get(variable.getName());
+
+		if (varDefinition == null) {
+			notifyError("Variable " + variable.getName() + " not defined", variable);
+			return null;
+		}
+
+		variable.setVarDefinition(varDefinition);
+
+		return null;
+	}
+
+
+    // # --------------------------------------------------------
+    // Métodos auxiliares
+
+    // private void notifyError(String msg) {
+    //     errorManager.notify("Identification", msg);
+    // }
+	
+	private void notifyError(String msg, AST node) {
+		notifyError(msg, node.start());
+	}
 
     private void notifyError(String msg, Position position) {
         errorManager.notify("Identification", msg, position);
     }
 
-    private void notifyError(String msg, AST node) {
-        notifyError(msg, node.start());
-    }
 
 }
