@@ -179,27 +179,15 @@ public class ExceptionThrowerVisitor implements Visitor {
 	}
 
 	@Override
-	public Object visit(Logic logic, Object param) {
+	public Object visit(LogicBinary logicBinary, Object param) {
 
-        throw new UnsupportedOperationException("'ExceptionThrowerVisitor.visit(Logic)' has been invoked but it has not been implemented.");
+        throw new UnsupportedOperationException("'ExceptionThrowerVisitor.visit(LogicBinary)' has been invoked but it has not been implemented.");
 	}
 
 	@Override
-	public Object visit(LogicAnd logicAnd, Object param) {
+	public Object visit(LogicUnary logicUnary, Object param) {
 
-        throw new UnsupportedOperationException("'ExceptionThrowerVisitor.visit(LogicAnd)' has been invoked but it has not been implemented.");
-	}
-
-	@Override
-	public Object visit(LogicOr logicOr, Object param) {
-
-        throw new UnsupportedOperationException("'ExceptionThrowerVisitor.visit(LogicOr)' has been invoked but it has not been implemented.");
-	}
-
-	@Override
-	public Object visit(LogicNot logicNot, Object param) {
-
-        throw new UnsupportedOperationException("'ExceptionThrowerVisitor.visit(LogicNot)' has been invoked but it has not been implemented.");
+        throw new UnsupportedOperationException("'ExceptionThrowerVisitor.visit(LogicUnary)' has been invoked but it has not been implemented.");
 	}
 
     // %% User Members -------------------------

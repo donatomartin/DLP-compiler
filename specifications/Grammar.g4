@@ -63,13 +63,13 @@ expression returns [Expression ast]
 	| left=expression '[' right=expression ']' { $ast = new ArrayAccess($left.ast, $right.ast); }
 	| '(' expression ')' { $ast = $expression.ast; }
 	| '<' type '>' '(' expression ')' { $ast = new Cast($type.ast, $expression.ast); }
-	| '!' e=expression { $ast = new LogicNot($e.ast); }
+	| operator='!' e=expression { $ast = new LogicUnary($operator, $e.ast); }
 	| left=expression operator=('*'|'/'|'%') right=expression { $ast = new Arithmetic($left.ast, $operator, $right.ast); }
 	| left=expression operator=('+'|'-') right=expression { $ast = new Arithmetic($left.ast, $operator, $right.ast); }
-	| left=expression operator=('<'|'>'|'<='|'>=') right=expression { $ast = new Logic($left.ast, $operator, $right.ast); }
-	| left=expression operator=('!='|'==') right=expression { $ast = new Logic($left.ast, $operator, $right.ast); }
-	| left=expression '&&' right=expression { $ast = new LogicAnd($left.ast, $right.ast); }
-	| left=expression '||' right=expression { $ast = new LogicOr($left.ast, $right.ast); }
+	| left=expression operator=('<'|'>'|'<='|'>=') right=expression { $ast = new LogicBinary($left.ast, $operator, $right.ast); }
+	| left=expression operator=('!='|'==') right=expression { $ast = new LogicBinary($left.ast, $operator, $right.ast); }
+	| left=expression operator='&&' right=expression { $ast = new LogicBinary($left.ast, $operator, $right.ast); }
+	| left=expression operator='||' right=expression { $ast = new LogicBinary($left.ast, $operator, $right.ast); }
 	;
 
 type returns [Type ast]

@@ -36,12 +36,10 @@ charLiteral:expression -> char;
 functionCallExpression:expression -> string expression*;
 structAccess:expression -> expression string;
 arrayAccess:expression -> left:expression right:expression;
-cast:expression -> type expression;
+cast:expression -> castType:type expression;
 arithmetic:expression -> left:expression operator:string right:expression;
-Logic:expression -> left:expression operator:string right:expression;
-logicAnd:expression -> left:expression right:expression;
-logicOr:expression -> left:expression right:expression;
-logicNot:expression -> expression;
+logicBinary:expression -> left:expression operator:string right:expression;
+logicUnary:expression -> operator:string expression;
 
 ATTRIBUTE GRAMMAR Identification
 
@@ -49,3 +47,8 @@ variable -> varDefinition;
 functionCallStatement -> functionDefinition;
 functionCallExpression -> functionDefinition;
 structType -> structDefinition;
+
+ATTRIBUTE GRAMMAR TypeChecking
+
+expression -> type;
+expression -> lvalue:boolean;

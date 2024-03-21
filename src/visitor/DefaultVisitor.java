@@ -196,7 +196,7 @@ public class DefaultVisitor implements Visitor {
 	@Override
 	public Object visit(Cast cast, Object param) {
 
-		cast.getType().accept(this, param);
+		cast.getCastType().accept(this, param);
 		cast.getExpression().accept(this, param);
 		return null;
 	}
@@ -210,33 +210,17 @@ public class DefaultVisitor implements Visitor {
 	}
 
 	@Override
-	public Object visit(Logic logic, Object param) {
+	public Object visit(LogicBinary logicBinary, Object param) {
 
-		logic.getLeft().accept(this, param);
-		logic.getRight().accept(this, param);
+		logicBinary.getLeft().accept(this, param);
+		logicBinary.getRight().accept(this, param);
 		return null;
 	}
 
 	@Override
-	public Object visit(LogicAnd logicAnd, Object param) {
+	public Object visit(LogicUnary logicUnary, Object param) {
 
-		logicAnd.getLeft().accept(this, param);
-		logicAnd.getRight().accept(this, param);
-		return null;
-	}
-
-	@Override
-	public Object visit(LogicOr logicOr, Object param) {
-
-		logicOr.getLeft().accept(this, param);
-		logicOr.getRight().accept(this, param);
-		return null;
-	}
-
-	@Override
-	public Object visit(LogicNot logicNot, Object param) {
-
-		logicNot.getExpression().accept(this, param);
+		logicUnary.getExpression().accept(this, param);
 		return null;
 	}
 

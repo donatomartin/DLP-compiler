@@ -2,6 +2,7 @@
 
 package ast.expression;
 
+import ast.type.*;
 import org.antlr.v4.runtime.Token;
 import visitor.Visitor;
 
@@ -14,6 +15,10 @@ import visitor.Visitor;
 /*
 	structAccess: expression -> expression:expression name:string
 	expression -> 
+	
+	PHASE TypeChecking
+	expression -> type:type
+	expression -> lvalue:boolean
 */
 public class StructAccess extends AbstractExpression  {
 

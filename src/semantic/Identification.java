@@ -186,20 +186,19 @@ public class Identification extends DefaultVisitor {
 	}
 
 
-    // # --------------------------------------------------------
-    // Métodos auxiliares
+    // --------------------------------------------------------
+    // Auxiliary methods
 
-    // private void notifyError(String msg) {
-    //     errorManager.notify("Identification", msg);
-    // }
-	
 	private void notifyError(String msg, AST node) {
 		notifyError(msg, node.start());
 	}
-
+	
     private void notifyError(String msg, Position position) {
-        errorManager.notify("Identification", msg, position);
+		errorManager.notify("Identification", msg, position);
     }
-
+	
+	// private void notifyError(String msg) {
+	//     errorManager.notify("Identification", msg);
+	// }
 
 }

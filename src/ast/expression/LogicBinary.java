@@ -2,6 +2,8 @@
 
 package ast.expression;
 
+import ast.type.*;
+import org.antlr.v4.runtime.Token;
 import visitor.Visitor;
 
 // %% User Declarations -------------
@@ -10,53 +12,67 @@ import visitor.Visitor;
 
 // %% -------------------------------
 
+
 /*
-	logicOr: expression -> left:expression right:expression
+	logicBinary: expression -> left:expression operator:string right:expression
 	expression -> 
+	
+	PHASE TypeChecking
+	expression -> type:type
+	expression -> lvalue:boolean
 */
-public class LogicOr extends AbstractExpression  {
+public class LogicBinary extends AbstractExpression  {
 
     // ----------------------------------
     // Instance Variables
 
-	// logicOr: expression -> left:expression right:expression
+	// logicBinary: expression -> left:expression operator:string right:expression
 	private Expression left;
+	private String operator;
 	private Expression right;
 
     // ----------------------------------
     // Constructors
 
-	public LogicOr(Expression left, Expression right) {
+	public LogicBinary(Expression left, String operator, Expression right) {
 		super();
 
 		if (left == null)
 			throw new IllegalArgumentException("Parameter 'left' can't be null. Pass a non-null value or use 'expression?' in the abstract grammar");
 		this.left = left;
 
+		if (operator == null)
+			throw new IllegalArgumentException("Parameter 'operator' can't be null. Pass a non-null value or use 'string?' in the abstract grammar");
+		this.operator = operator;
+
 		if (right == null)
 			throw new IllegalArgumentException("Parameter 'right' can't be null. Pass a non-null value or use 'expression?' in the abstract grammar");
 		this.right = right;
 
-		updatePositions(left, right);
+		updatePositions(left, operator, right);
 	}
 
-	public LogicOr(Object left, Object right) {
+	public LogicBinary(Object left, Object operator, Object right) {
 		super();
 
         if (left == null)
             throw new IllegalArgumentException("Parameter 'left' can't be null. Pass a non-null value or use 'expression?' in the abstract grammar");
 		this.left = (Expression) left;
 
+        if (operator == null)
+            throw new IllegalArgumentException("Parameter 'operator' can't be null. Pass a non-null value or use 'string?' in the abstract grammar");
+		this.operator = (operator instanceof Token) ? ((Token) operator).getText() : (String) operator;
+
         if (right == null)
             throw new IllegalArgumentException("Parameter 'right' can't be null. Pass a non-null value or use 'expression?' in the abstract grammar");
 		this.right = (Expression) right;
 
-		updatePositions(left, right);
+		updatePositions(left, operator, right);
 	}
 
 
     // ----------------------------------
-    // logicOr: expression -> left:expression right:expression
+    // logicBinary: expression -> left:expression operator:string right:expression
 
 	// Child 'left:expression' 
 
@@ -69,6 +85,20 @@ public class LogicOr extends AbstractExpression  {
 
     public Expression getLeft() {
         return left;
+    }
+
+
+	// Child 'operator:string' 
+
+	public void setOperator(String operator) {
+		if (operator == null)
+			throw new IllegalArgumentException("Parameter 'operator' can't be null. Pass a non-null value or use 'string?' in the abstract grammar");
+		this.operator = operator;
+
+	}
+
+    public String getOperator() {
+        return operator;
     }
 
 
@@ -96,7 +126,7 @@ public class LogicOr extends AbstractExpression  {
 
     @Override
     public String toString() {
-        return "LogicOr{" + " left=" + this.getLeft() + " right=" + this.getRight() + "}";
+        return "LogicBinary{" + " left=" + this.getLeft() + " operator=" + this.getOperator() + " right=" + this.getRight() + "}";
     }
 
 
@@ -105,4 +135,5 @@ public class LogicOr extends AbstractExpression  {
         // Methods/attributes in this section will be preserved. Delete if not needed
 
     // %% --------------------------------------
+
 }

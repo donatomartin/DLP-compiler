@@ -6,6 +6,10 @@
 package semantic;
 
 import ast.*;
+import ast.definition.*;
+import ast.statement.*;
+import ast.expression.*;
+import ast.type.*;
 import main.ErrorManager;
 import visitor.DefaultVisitor;
 
@@ -23,29 +27,83 @@ public class TypeChecking extends DefaultVisitor {
         ast.accept(this, null);
     }
 
-    // # ----------------------------------------------------------
-    /*
-    * Implement visit methods here.
-    */
+    // ----------------------------------------------------------
+    // Visit methods
 
-    // public Object visit(Program prog, Object param) {
-    //      ...
-    // }
+    // class Assignment(Expression left, Expression right)
+	@Override
+	public Object visit(Assignment assignment, Object param) {
 
-    // ...
-    // ...
-    // ...
+        Expression left = assignment.getLeft();
+        Expression right = assignment.getRight();
+        
+        predicate(sameType(left.getType(), right.getType()), "Types of left and right expressions do not match", assignment);
+        predicate(left.isLvalue(), "Left expression must be an lvalue", assignment);
+        
+        super.visit(assignment, param);
 
-    //# ----------------------------------------------------------
-    //# Auxiliary methods (optional)
+		return null;
+	}
+
+    // class Arithmetic(Expression left, String operator, Expression right)
+	// phase TypeChecking { Type type, boolean lvalue }
+	@Override
+	public Object visit(Arithmetic arithmetic, Object param) {
+
+        Expression left = arithmetic.getLeft();
+        Expression right = arithmetic.getRight();
+
+        if (arithmetic.getOperator().equals("%")) {
+            predicate(left.getType() instanceof IntType, "Left operand of '%' operator must be of type IntType", arithmetic);
+            predicate(right.getType() instanceof IntType, "Right operand of '%' operator must be of type IntType", arithmetic);
+        }
+        else {
+            predicate(left.getType() instanceof IntType || left.getType() instanceof FloatType, "Left operand of arithmetic operator must be of type IntType or FloatType", arithmetic);
+            predicate(right.getType() instanceof IntType || right.getType() instanceof FloatType, "Right operand of arithmetic operator must be of type IntType or FloatType", arithmetic);
+        }
+
+        arithmetic.setLvalue(false);
+        arithmetic.setType(left.getType());
+
+		super.visit(arithmetic, param);
+
+		return null;
+	}
+
+    // class Cast(Type castType, Expression expression)
+	// phase TypeChecking { Type type, boolean lvalue }
+	@Override
+	public Object visit(Cast cast, Object param) {
+
+        Type castType = cast.getCastType();
+        Expression expression = cast.getExpression();
+
+        predicate(sameType(castType, expression.getType()), "Types of cast and expression already match", cast);
+        
+		cast.setType(cast.getCastType());
+		cast.setLvalue(false);
+
+		super.visit(cast, param);
+
+		return null;
+	}
+
+    
+
+    // ----------------------------------------------------------
+    // Auxiliary methods
+
+    private boolean sameType(Type typeA, Type typeB) {
+        return typeA.equals(typeB);
+    }
 
     private void notifyError(String errorMessage, Position position) {
         errorManager.notify("Type Checking", errorMessage, position);
     }
 
-    private void notifyError(String msg) {
-        errorManager.notify("Type Checking", msg);
-    }
+    // private void notifyError(String msg) {
+    //     errorManager.notify("Type Checking", msg);
+    // }
 
     /**
      * predicate. Auxiliary method to implement predicates. Delete if not needed.

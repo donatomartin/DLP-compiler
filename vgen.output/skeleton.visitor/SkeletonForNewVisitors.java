@@ -238,6 +238,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 
 	// class Variable(String name)
 	// phase Identification { VarDefinition varDefinition }
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(Variable variable, Object param) {
 
@@ -245,6 +246,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class IntLiteral(int intValue)
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(IntLiteral intLiteral, Object param) {
 
@@ -252,6 +254,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class FloatLiteral(float floatValue)
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(FloatLiteral floatLiteral, Object param) {
 
@@ -259,6 +262,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class CharLiteral(char charValue)
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(CharLiteral charLiteral, Object param) {
 
@@ -267,6 +271,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 
 	// class FunctionCallExpression(String name, List<Expression> expressions)
 	// phase Identification { FunctionDefinition functionDefinition }
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(FunctionCallExpression functionCallExpression, Object param) {
 
@@ -277,6 +282,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class StructAccess(Expression expression, String name)
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(StructAccess structAccess, Object param) {
 
@@ -287,6 +293,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class ArrayAccess(Expression left, Expression right)
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(ArrayAccess arrayAccess, Object param) {
 
@@ -297,11 +304,12 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 		return null;
 	}
 
-	// class Cast(Type type, Expression expression)
+	// class Cast(Type castType, Expression expression)
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(Cast cast, Object param) {
 
-		// cast.getType().accept(this, param);
+		// cast.getCastType().accept(this, param);
 		// cast.getExpression().accept(this, param);
 		super.visit(cast, param);
 
@@ -309,6 +317,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Arithmetic(Expression left, String operator, Expression right)
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(Arithmetic arithmetic, Object param) {
 
@@ -319,45 +328,25 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 		return null;
 	}
 
-	// class Logic(Expression left, String operator, Expression right)
+	// class LogicBinary(Expression left, String operator, Expression right)
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
-	public Object visit(Logic logic, Object param) {
+	public Object visit(LogicBinary logicBinary, Object param) {
 
-		// logic.getLeft().accept(this, param);
-		// logic.getRight().accept(this, param);
-		super.visit(logic, param);
+		// logicBinary.getLeft().accept(this, param);
+		// logicBinary.getRight().accept(this, param);
+		super.visit(logicBinary, param);
 
 		return null;
 	}
 
-	// class LogicAnd(Expression left, Expression right)
+	// class LogicUnary(String operator, Expression expression)
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
-	public Object visit(LogicAnd logicAnd, Object param) {
+	public Object visit(LogicUnary logicUnary, Object param) {
 
-		// logicAnd.getLeft().accept(this, param);
-		// logicAnd.getRight().accept(this, param);
-		super.visit(logicAnd, param);
-
-		return null;
-	}
-
-	// class LogicOr(Expression left, Expression right)
-	@Override
-	public Object visit(LogicOr logicOr, Object param) {
-
-		// logicOr.getLeft().accept(this, param);
-		// logicOr.getRight().accept(this, param);
-		super.visit(logicOr, param);
-
-		return null;
-	}
-
-	// class LogicNot(Expression expression)
-	@Override
-	public Object visit(LogicNot logicNot, Object param) {
-
-		// logicNot.getExpression().accept(this, param);
-		super.visit(logicNot, param);
+		// logicUnary.getExpression().accept(this, param);
+		super.visit(logicUnary, param);
 
 		return null;
 	}

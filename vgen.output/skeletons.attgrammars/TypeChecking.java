@@ -68,7 +68,7 @@ import ast.type.*;
 import ast.expression.*;
 
 
-public class Identification extends DefaultVisitor {
+public class TypeChecking extends DefaultVisitor {
 
     public void process(AST ast) {
         ast.accept(this, null);
@@ -157,8 +157,6 @@ public class Identification extends DefaultVisitor {
 		// functionCallStatement.getExpressions().forEach(expression -> expression.accept(this, param));
 		super.visit(functionCallStatement, param);
 
-		// TODO: Remember to initialize SYNTHESIZED attributes <-----
-		// functionCallStatement.setFunctionDefinition(?);
 		return null;
 	}
 
@@ -242,44 +240,57 @@ public class Identification extends DefaultVisitor {
 	@Override
 	public Object visit(StructType structType, Object param) {
 
-		// TODO: Remember to initialize SYNTHESIZED attributes <-----
-		// structType.setStructDefinition(?);
 		return null;
 	}
 
 	// class Variable(String name)
 	// phase Identification { VarDefinition varDefinition }
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(Variable variable, Object param) {
 
 		// TODO: Remember to initialize SYNTHESIZED attributes <-----
-		// variable.setVarDefinition(?);
+		// variable.setType(?);
+		// variable.setLvalue(?);
 		return null;
 	}
 
 	// class IntLiteral(int intValue)
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(IntLiteral intLiteral, Object param) {
 
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// intLiteral.setType(?);
+		// intLiteral.setLvalue(?);
 		return null;
 	}
 
 	// class FloatLiteral(float floatValue)
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(FloatLiteral floatLiteral, Object param) {
 
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// floatLiteral.setType(?);
+		// floatLiteral.setLvalue(?);
 		return null;
 	}
 
 	// class CharLiteral(char charValue)
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(CharLiteral charLiteral, Object param) {
 
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// charLiteral.setType(?);
+		// charLiteral.setLvalue(?);
 		return null;
 	}
 
 	// class FunctionCallExpression(String name, List<Expression> expressions)
 	// phase Identification { FunctionDefinition functionDefinition }
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(FunctionCallExpression functionCallExpression, Object param) {
 
@@ -287,21 +298,27 @@ public class Identification extends DefaultVisitor {
 		super.visit(functionCallExpression, param);
 
 		// TODO: Remember to initialize SYNTHESIZED attributes <-----
-		// functionCallExpression.setFunctionDefinition(?);
+		// functionCallExpression.setType(?);
+		// functionCallExpression.setLvalue(?);
 		return null;
 	}
 
 	// class StructAccess(Expression expression, String name)
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(StructAccess structAccess, Object param) {
 
 		// structAccess.getExpression().accept(this, param);
 		super.visit(structAccess, param);
 
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// structAccess.setType(?);
+		// structAccess.setLvalue(?);
 		return null;
 	}
 
 	// class ArrayAccess(Expression left, Expression right)
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(ArrayAccess arrayAccess, Object param) {
 
@@ -309,10 +326,14 @@ public class Identification extends DefaultVisitor {
 		// arrayAccess.getRight().accept(this, param);
 		super.visit(arrayAccess, param);
 
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// arrayAccess.setType(?);
+		// arrayAccess.setLvalue(?);
 		return null;
 	}
 
 	// class Cast(Type castType, Expression expression)
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(Cast cast, Object param) {
 
@@ -320,10 +341,14 @@ public class Identification extends DefaultVisitor {
 		// cast.getExpression().accept(this, param);
 		super.visit(cast, param);
 
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// cast.setType(?);
+		// cast.setLvalue(?);
 		return null;
 	}
 
 	// class Arithmetic(Expression left, String operator, Expression right)
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(Arithmetic arithmetic, Object param) {
 
@@ -331,10 +356,14 @@ public class Identification extends DefaultVisitor {
 		// arithmetic.getRight().accept(this, param);
 		super.visit(arithmetic, param);
 
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// arithmetic.setType(?);
+		// arithmetic.setLvalue(?);
 		return null;
 	}
 
 	// class LogicBinary(Expression left, String operator, Expression right)
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(LogicBinary logicBinary, Object param) {
 
@@ -342,16 +371,23 @@ public class Identification extends DefaultVisitor {
 		// logicBinary.getRight().accept(this, param);
 		super.visit(logicBinary, param);
 
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// logicBinary.setType(?);
+		// logicBinary.setLvalue(?);
 		return null;
 	}
 
 	// class LogicUnary(String operator, Expression expression)
+	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(LogicUnary logicUnary, Object param) {
 
 		// logicUnary.getExpression().accept(this, param);
 		super.visit(logicUnary, param);
 
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// logicUnary.setType(?);
+		// logicUnary.setLvalue(?);
 		return null;
 	}
 

@@ -68,13 +68,9 @@ public interface Visitor {
 
 	public Object visit(Arithmetic arithmetic, Object param);
 
-	public Object visit(Logic logic, Object param);
+	public Object visit(LogicBinary logicBinary, Object param);
 
-	public Object visit(LogicAnd logicAnd, Object param);
-
-	public Object visit(LogicOr logicOr, Object param);
-
-	public Object visit(LogicNot logicNot, Object param);
+	public Object visit(LogicUnary logicUnary, Object param);
 
 
 }

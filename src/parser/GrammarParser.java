@@ -1059,10 +1059,10 @@ public class GrammarParser extends Parser {
 			case 8:
 				{
 				setState(255);
-				match(T__23);
+				((ExpressionContext)_localctx).operator = match(T__23);
 				setState(256);
 				((ExpressionContext)_localctx).e = ((ExpressionContext)_localctx).expression = expression(7);
-				 ((ExpressionContext)_localctx).ast =  new LogicNot(((ExpressionContext)_localctx).e.ast); 
+				 ((ExpressionContext)_localctx).ast =  new LogicUnary(((ExpressionContext)_localctx).operator, ((ExpressionContext)_localctx).e.ast); 
 				}
 				break;
 			}
@@ -1144,7 +1144,7 @@ public class GrammarParser extends Parser {
 						}
 						setState(273);
 						((ExpressionContext)_localctx).right = ((ExpressionContext)_localctx).expression = expression(5);
-						 ((ExpressionContext)_localctx).ast =  new Logic(((ExpressionContext)_localctx).left.ast, ((ExpressionContext)_localctx).operator, ((ExpressionContext)_localctx).right.ast); 
+						 ((ExpressionContext)_localctx).ast =  new LogicBinary(((ExpressionContext)_localctx).left.ast, ((ExpressionContext)_localctx).operator, ((ExpressionContext)_localctx).right.ast); 
 						}
 						break;
 					case 4:
@@ -1167,7 +1167,7 @@ public class GrammarParser extends Parser {
 						}
 						setState(278);
 						((ExpressionContext)_localctx).right = ((ExpressionContext)_localctx).expression = expression(4);
-						 ((ExpressionContext)_localctx).ast =  new Logic(((ExpressionContext)_localctx).left.ast, ((ExpressionContext)_localctx).operator, ((ExpressionContext)_localctx).right.ast); 
+						 ((ExpressionContext)_localctx).ast =  new LogicBinary(((ExpressionContext)_localctx).left.ast, ((ExpressionContext)_localctx).operator, ((ExpressionContext)_localctx).right.ast); 
 						}
 						break;
 					case 5:
@@ -1178,10 +1178,10 @@ public class GrammarParser extends Parser {
 						setState(281);
 						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
 						setState(282);
-						match(T__33);
+						((ExpressionContext)_localctx).operator = match(T__33);
 						setState(283);
 						((ExpressionContext)_localctx).right = ((ExpressionContext)_localctx).expression = expression(3);
-						 ((ExpressionContext)_localctx).ast =  new LogicAnd(((ExpressionContext)_localctx).left.ast, ((ExpressionContext)_localctx).right.ast); 
+						 ((ExpressionContext)_localctx).ast =  new LogicBinary(((ExpressionContext)_localctx).left.ast, ((ExpressionContext)_localctx).operator, ((ExpressionContext)_localctx).right.ast); 
 						}
 						break;
 					case 6:
@@ -1192,10 +1192,10 @@ public class GrammarParser extends Parser {
 						setState(286);
 						if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 						setState(287);
-						match(T__34);
+						((ExpressionContext)_localctx).operator = match(T__34);
 						setState(288);
 						((ExpressionContext)_localctx).right = ((ExpressionContext)_localctx).expression = expression(2);
-						 ((ExpressionContext)_localctx).ast =  new LogicOr(((ExpressionContext)_localctx).left.ast, ((ExpressionContext)_localctx).right.ast); 
+						 ((ExpressionContext)_localctx).ast =  new LogicBinary(((ExpressionContext)_localctx).left.ast, ((ExpressionContext)_localctx).operator, ((ExpressionContext)_localctx).right.ast); 
 						}
 						break;
 					case 7:

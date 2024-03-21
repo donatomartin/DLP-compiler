@@ -349,7 +349,9 @@ public class AstPrinter implements Visitor {
 
 		// Imprimir el 'toString()' de los atributos (pero no recorrer)
         printToString(indent + 1, "vgen-attribute-phase-0", "varDefinition", "VarDefinition", variable.getVarDefinition());
-		printUnknownFields(indent + 1, variable, "name", "varDefinition");
+        printToString(indent + 1, "vgen-attribute-phase-1", "type", "Type", variable.getType());
+        printToString(indent + 1, "vgen-attribute-phase-1", "lvalue", "boolean", variable.isLvalue());
+		printUnknownFields(indent + 1, variable, "name", "type", "lvalue", "varDefinition");
 		return null;
 	}
 
@@ -362,7 +364,9 @@ public class AstPrinter implements Visitor {
         printNonNodeChild(indent + 1, "intValue", "int", intLiteral.getIntValue());
 
 		// Imprimir el 'toString()' de los atributos (pero no recorrer)
-		printUnknownFields(indent + 1, intLiteral, "intValue");
+        printToString(indent + 1, "vgen-attribute-phase-1", "type", "Type", intLiteral.getType());
+        printToString(indent + 1, "vgen-attribute-phase-1", "lvalue", "boolean", intLiteral.isLvalue());
+		printUnknownFields(indent + 1, intLiteral, "intValue", "type", "lvalue");
 		return null;
 	}
 
@@ -375,7 +379,9 @@ public class AstPrinter implements Visitor {
         printNonNodeChild(indent + 1, "floatValue", "float", floatLiteral.getFloatValue());
 
 		// Imprimir el 'toString()' de los atributos (pero no recorrer)
-		printUnknownFields(indent + 1, floatLiteral, "floatValue");
+        printToString(indent + 1, "vgen-attribute-phase-1", "type", "Type", floatLiteral.getType());
+        printToString(indent + 1, "vgen-attribute-phase-1", "lvalue", "boolean", floatLiteral.isLvalue());
+		printUnknownFields(indent + 1, floatLiteral, "floatValue", "type", "lvalue");
 		return null;
 	}
 
@@ -388,7 +394,9 @@ public class AstPrinter implements Visitor {
         printNonNodeChild(indent + 1, "charValue", "char", charLiteral.getCharValue());
 
 		// Imprimir el 'toString()' de los atributos (pero no recorrer)
-		printUnknownFields(indent + 1, charLiteral, "charValue");
+        printToString(indent + 1, "vgen-attribute-phase-1", "type", "Type", charLiteral.getType());
+        printToString(indent + 1, "vgen-attribute-phase-1", "lvalue", "boolean", charLiteral.isLvalue());
+		printUnknownFields(indent + 1, charLiteral, "charValue", "type", "lvalue");
 		return null;
 	}
 
@@ -403,7 +411,9 @@ public class AstPrinter implements Visitor {
 
 		// Imprimir el 'toString()' de los atributos (pero no recorrer)
         printToString(indent + 1, "vgen-attribute-phase-0", "functionDefinition", "FunctionDefinition", functionCallExpression.getFunctionDefinition());
-		printUnknownFields(indent + 1, functionCallExpression, "name", "expressions", "functionDefinition");
+        printToString(indent + 1, "vgen-attribute-phase-1", "type", "Type", functionCallExpression.getType());
+        printToString(indent + 1, "vgen-attribute-phase-1", "lvalue", "boolean", functionCallExpression.isLvalue());
+		printUnknownFields(indent + 1, functionCallExpression, "name", "expressions", "type", "lvalue", "functionDefinition");
 		return null;
 	}
 
@@ -417,7 +427,9 @@ public class AstPrinter implements Visitor {
         printNonNodeChild(indent + 1, "name", "String", structAccess.getName());
 
 		// Imprimir el 'toString()' de los atributos (pero no recorrer)
-		printUnknownFields(indent + 1, structAccess, "expression", "name");
+        printToString(indent + 1, "vgen-attribute-phase-1", "type", "Type", structAccess.getType());
+        printToString(indent + 1, "vgen-attribute-phase-1", "lvalue", "boolean", structAccess.isLvalue());
+		printUnknownFields(indent + 1, structAccess, "expression", "name", "type", "lvalue");
 		return null;
 	}
 
@@ -431,7 +443,9 @@ public class AstPrinter implements Visitor {
         printNodeChild(indent + 1, "right", "Expression", arrayAccess.getRight());
 
 		// Imprimir el 'toString()' de los atributos (pero no recorrer)
-		printUnknownFields(indent + 1, arrayAccess, "left", "right");
+        printToString(indent + 1, "vgen-attribute-phase-1", "type", "Type", arrayAccess.getType());
+        printToString(indent + 1, "vgen-attribute-phase-1", "lvalue", "boolean", arrayAccess.isLvalue());
+		printUnknownFields(indent + 1, arrayAccess, "left", "right", "type", "lvalue");
 		return null;
 	}
 
@@ -441,11 +455,13 @@ public class AstPrinter implements Visitor {
 		int indent = ((Integer)param);
 
 		// Imprimir los hijos (y recorrer si son nodos del AST)
-        printNodeChild(indent + 1, "type", "Type", cast.getType());
+        printNodeChild(indent + 1, "castType", "Type", cast.getCastType());
         printNodeChild(indent + 1, "expression", "Expression", cast.getExpression());
 
 		// Imprimir el 'toString()' de los atributos (pero no recorrer)
-		printUnknownFields(indent + 1, cast, "type", "expression");
+        printToString(indent + 1, "vgen-attribute-phase-1", "type", "Type", cast.getType());
+        printToString(indent + 1, "vgen-attribute-phase-1", "lvalue", "boolean", cast.isLvalue());
+		printUnknownFields(indent + 1, cast, "castType", "expression", "type", "lvalue");
 		return null;
 	}
 
@@ -460,63 +476,42 @@ public class AstPrinter implements Visitor {
         printNodeChild(indent + 1, "right", "Expression", arithmetic.getRight());
 
 		// Imprimir el 'toString()' de los atributos (pero no recorrer)
-		printUnknownFields(indent + 1, arithmetic, "left", "operator", "right");
+        printToString(indent + 1, "vgen-attribute-phase-1", "type", "Type", arithmetic.getType());
+        printToString(indent + 1, "vgen-attribute-phase-1", "lvalue", "boolean", arithmetic.isLvalue());
+		printUnknownFields(indent + 1, arithmetic, "left", "operator", "right", "type", "lvalue");
 		return null;
 	}
 
 	@Override
-	public Object visit(Logic logic, Object param) {
+	public Object visit(LogicBinary logicBinary, Object param) {
 
 		int indent = ((Integer)param);
 
 		// Imprimir los hijos (y recorrer si son nodos del AST)
-        printNodeChild(indent + 1, "left", "Expression", logic.getLeft());
-        printNonNodeChild(indent + 1, "operator", "String", logic.getOperator());
-        printNodeChild(indent + 1, "right", "Expression", logic.getRight());
+        printNodeChild(indent + 1, "left", "Expression", logicBinary.getLeft());
+        printNonNodeChild(indent + 1, "operator", "String", logicBinary.getOperator());
+        printNodeChild(indent + 1, "right", "Expression", logicBinary.getRight());
 
 		// Imprimir el 'toString()' de los atributos (pero no recorrer)
-		printUnknownFields(indent + 1, logic, "left", "operator", "right");
+        printToString(indent + 1, "vgen-attribute-phase-1", "type", "Type", logicBinary.getType());
+        printToString(indent + 1, "vgen-attribute-phase-1", "lvalue", "boolean", logicBinary.isLvalue());
+		printUnknownFields(indent + 1, logicBinary, "left", "operator", "right", "type", "lvalue");
 		return null;
 	}
 
 	@Override
-	public Object visit(LogicAnd logicAnd, Object param) {
+	public Object visit(LogicUnary logicUnary, Object param) {
 
 		int indent = ((Integer)param);
 
 		// Imprimir los hijos (y recorrer si son nodos del AST)
-        printNodeChild(indent + 1, "left", "Expression", logicAnd.getLeft());
-        printNodeChild(indent + 1, "right", "Expression", logicAnd.getRight());
+        printNonNodeChild(indent + 1, "operator", "String", logicUnary.getOperator());
+        printNodeChild(indent + 1, "expression", "Expression", logicUnary.getExpression());
 
 		// Imprimir el 'toString()' de los atributos (pero no recorrer)
-		printUnknownFields(indent + 1, logicAnd, "left", "right");
-		return null;
-	}
-
-	@Override
-	public Object visit(LogicOr logicOr, Object param) {
-
-		int indent = ((Integer)param);
-
-		// Imprimir los hijos (y recorrer si son nodos del AST)
-        printNodeChild(indent + 1, "left", "Expression", logicOr.getLeft());
-        printNodeChild(indent + 1, "right", "Expression", logicOr.getRight());
-
-		// Imprimir el 'toString()' de los atributos (pero no recorrer)
-		printUnknownFields(indent + 1, logicOr, "left", "right");
-		return null;
-	}
-
-	@Override
-	public Object visit(LogicNot logicNot, Object param) {
-
-		int indent = ((Integer)param);
-
-		// Imprimir los hijos (y recorrer si son nodos del AST)
-        printNodeChild(indent + 1, "expression", "Expression", logicNot.getExpression());
-
-		// Imprimir el 'toString()' de los atributos (pero no recorrer)
-		printUnknownFields(indent + 1, logicNot, "expression");
+        printToString(indent + 1, "vgen-attribute-phase-1", "type", "Type", logicUnary.getType());
+        printToString(indent + 1, "vgen-attribute-phase-1", "lvalue", "boolean", logicUnary.isLvalue());
+		printUnknownFields(indent + 1, logicUnary, "operator", "expression", "type", "lvalue");
 		return null;
 	}
 

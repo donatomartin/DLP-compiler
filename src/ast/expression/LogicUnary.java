@@ -2,6 +2,8 @@
 
 package ast.expression;
 
+import ast.type.*;
+import org.antlr.v4.runtime.Token;
 import visitor.Visitor;
 
 // %% User Declarations -------------
@@ -11,43 +13,70 @@ import visitor.Visitor;
 // %% -------------------------------
 
 /*
-	logicNot: expression -> expression:expression
+	logicUnary: expression -> operator:string expression:expression
 	expression -> 
+	
+	PHASE TypeChecking
+	expression -> type:type
+	expression -> lvalue:boolean
 */
-public class LogicNot extends AbstractExpression  {
+public class LogicUnary extends AbstractExpression  {
 
     // ----------------------------------
     // Instance Variables
 
-	// logicNot: expression -> expression
+	// logicUnary: expression -> operator:string expression
+	private String operator;
 	private Expression expression;
 
     // ----------------------------------
     // Constructors
 
-	public LogicNot(Expression expression) {
+	public LogicUnary(String operator, Expression expression) {
 		super();
+
+		if (operator == null)
+			throw new IllegalArgumentException("Parameter 'operator' can't be null. Pass a non-null value or use 'string?' in the abstract grammar");
+		this.operator = operator;
 
 		if (expression == null)
 			throw new IllegalArgumentException("Parameter 'expression' can't be null. Pass a non-null value or use 'expression?' in the abstract grammar");
 		this.expression = expression;
 
-		updatePositions(expression);
+		updatePositions(operator, expression);
 	}
 
-	public LogicNot(Object expression) {
+	public LogicUnary(Object operator, Object expression) {
 		super();
+
+        if (operator == null)
+            throw new IllegalArgumentException("Parameter 'operator' can't be null. Pass a non-null value or use 'string?' in the abstract grammar");
+		this.operator = (operator instanceof Token) ? ((Token) operator).getText() : (String) operator;
 
         if (expression == null)
             throw new IllegalArgumentException("Parameter 'expression' can't be null. Pass a non-null value or use 'expression?' in the abstract grammar");
 		this.expression = (Expression) expression;
 
-		updatePositions(expression);
+		updatePositions(operator, expression);
 	}
 
 
     // ----------------------------------
-    // logicNot: expression -> expression
+    // logicUnary: expression -> operator:string expression
+
+	// Child 'operator:string' 
+
+	public void setOperator(String operator) {
+		if (operator == null)
+			throw new IllegalArgumentException("Parameter 'operator' can't be null. Pass a non-null value or use 'string?' in the abstract grammar");
+		this.operator = operator;
+
+	}
+
+    public String getOperator() {
+        return operator;
+    }
+
 
 	// Child 'expression' 
 
@@ -73,7 +102,7 @@ public class LogicNot extends AbstractExpression  {
 
     @Override
     public String toString() {
-        return "LogicNot{" + " expression=" + this.getExpression() + "}";
+        return "LogicUnary{" + " operator=" + this.getOperator() + " expression=" + this.getExpression() + "}";
     }
 
 
