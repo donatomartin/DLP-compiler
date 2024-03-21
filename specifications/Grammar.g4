@@ -16,7 +16,7 @@ program returns [Program ast]
 
 definition returns [Definition ast]
 	: 'var' IDENT ':' type ';' { $ast = new VarDefinition($IDENT, $type.ast); }
-	| 'struct' IDENT '{' fields '}' { $ast = new StructDefinition($IDENT, $fields.list); }
+	| 'struct' IDENT '{' fields '}' ';'? { $ast = new StructDefinition($IDENT, $fields.list); } // TODO: comprobar si los structs llevan ; al final
 	| functionDefinition { $ast = $functionDefinition.ast; }
 	;
 
@@ -25,7 +25,7 @@ functionDefinition returns [FunctionDefinition ast]
 	| IDENT '(' parameters ')' '{' definitions+=definition* statements+=statement* '}'  { $ast = new FunctionDefinition($IDENT, $parameters.list, null, $definitions, $statements); }
 	;
 
-fields returns [List<Field> list = new ArrayList<Field>()]
+fields returns [List<Field> list = new ArrayList<Field>()] // TODO: reducir fields y parameters a EBNF
 	: (field {$list.add($field.ast);})*
 	;
 
@@ -44,7 +44,7 @@ parameter returns [VarDefinition ast]
 statement returns [Statement ast]
 	: ('print'|'printsp' | 'println') e=expression ';' { $ast = new Print($e.ast); }
 	| 'read' e=expression ';' { $ast = new Read($e.ast); }
-	| IDENT '(' (arguments+=expression (',' arguments+=expression )*)?  ')' { $ast = new FunctionCallStatement($IDENT, $arguments); }
+	| IDENT '(' (arguments+=expression (',' arguments+=expression )*)?  ')' ';' { $ast = new FunctionCallStatement($IDENT, $arguments); }
 	| left=expression '=' right=expression ';' { $ast = new Assignment($left.ast, $right.ast); }
 	| 'if' '(' e=expression ')' '{' ifStatements+=statement* '}' 'else' '{' elseStatements+=statement* '}' { $ast = new Conditional($e.ast, $ifStatements, $elseStatements); }
 	| 'if' '(' e=expression ')' '{' ifStatements+=statement* '}'  { $ast = new Conditional($e.ast, $ifStatements, null); }

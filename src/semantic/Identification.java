@@ -2,9 +2,6 @@ package semantic;
 
 import visitor.DefaultVisitor;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import ast.*;
 import ast.definition.*;
 import ast.statement.*;
@@ -18,10 +15,10 @@ public class Identification extends DefaultVisitor {
 
     private ErrorManager errorManager;
 
-	private Map<String, FunctionDefinition> functionDefinitions = new HashMap<>();
-	private Map<String, VarDefinition> varDefinitions = new HashMap<>();
-	private Map<String, StructDefinition> structDefinitions = new HashMap<>();
-	private Map<String, Field> fieldDefinitions = new HashMap<>();
+	private ContextMap<FunctionDefinition> functionDefinitions = new ContextMap<>();
+	private ContextMap<VarDefinition> varDefinitions = new ContextMap<>();
+	private ContextMap<StructDefinition> structDefinitions = new ContextMap<>();
+	private ContextMap<Field> fieldDefinitions = new ContextMap<>();
 
     public Identification(ErrorManager errorManager) {
         this.errorManager = errorManager;
@@ -37,8 +34,11 @@ public class Identification extends DefaultVisitor {
 	@Override
 	public Object visit(FunctionDefinition functionDefinition, Object param) {
 
-		if (functionDefinitions.containsKey(functionDefinition.getName())) {
+		varDefinitions.set();
+
+		if (functionDefinitions.getFromAny(functionDefinition.getName()) != null) {
 			notifyError("Function " + functionDefinition.getName() + " already defined", functionDefinition);
+			varDefinitions.reset();
 			return null;
 		}
 
@@ -49,6 +49,8 @@ public class Identification extends DefaultVisitor {
 		functionDefinition.getDefinitions().forEach(definition -> definition.accept(this, param));
 		functionDefinition.getStatements().forEach(statement -> statement.accept(this, param));
 
+		varDefinitions.reset();
+
 		return null;
 	}
 
@@ -57,7 +59,7 @@ public class Identification extends DefaultVisitor {
 	@Override
 	public Object visit(FunctionCallStatement functionCallStatement, Object param) {
 
-		FunctionDefinition functionDefinition = functionDefinitions.get(functionCallStatement.getName());
+		FunctionDefinition functionDefinition = functionDefinitions.getFromAny(functionCallStatement.getName());
 		
 		if (functionDefinition == null) {
 			notifyError("Function " + functionCallStatement.getName() + " not defined", functionCallStatement);
@@ -76,7 +78,7 @@ public class Identification extends DefaultVisitor {
 	@Override
 	public Object visit(FunctionCallExpression functionCallExpression, Object param) {
 
-		FunctionDefinition functionDefinition = functionDefinitions.get(functionCallExpression.getName());
+		FunctionDefinition functionDefinition = functionDefinitions.getFromAny(functionCallExpression.getName());
 		
 		if (functionDefinition == null) {
 			notifyError("Function " + functionCallExpression.getName() + " not defined", functionCallExpression);
@@ -94,7 +96,7 @@ public class Identification extends DefaultVisitor {
 	@Override
 	public Object visit(StructDefinition structDefinition, Object param) {
 
-		if (structDefinitions.containsKey(structDefinition.getName())) {
+		if (structDefinitions.getFromTop(structDefinition.getName()) != null) {
 			notifyError("Struct " + structDefinition.getName() + " already defined", structDefinition);
 			return null;
 		}
@@ -111,11 +113,15 @@ public class Identification extends DefaultVisitor {
 	@Override
 	public Object visit(StructType structType, Object param) {
 
-		StructDefinition structDefinition = structDefinitions.get(structType.getName());
+		StructDefinition structDefinition = structDefinitions.getFromAny(structType.getName());
 
 		if (structDefinition == null) {
 			notifyError("Struct " + structType.getName() + " not defined", structType);
 			return null;
+		}
+
+		for (Field field : structDefinition.getFields()) {
+			field.accept(this, param);
 		}
 
 		structType.setStructDefinition(structDefinition);
@@ -127,10 +133,12 @@ public class Identification extends DefaultVisitor {
 	@Override
 	public Object visit(Field field, Object param) {
 
-		if (fieldDefinitions.containsKey(field.getName())) {
+		if (fieldDefinitions.getFromTop(field.getName()) != null) {
 			notifyError("Field " + field.getName() + " already defined", field);
 			return null;
 		}
+
+		field.getType().accept(this, param);
 
 		fieldDefinitions.put(field.getName(), field);
 
@@ -150,7 +158,7 @@ public class Identification extends DefaultVisitor {
 	@Override
 	public Object visit(VarDefinition varDefinition, Object param) {
 
-		if (varDefinitions.containsKey(varDefinition.getName())) {
+		if (varDefinitions.getFromTop(varDefinition.getName()) != null) {
 			notifyError("Variable " + varDefinition.getName() + " already defined", varDefinition);
 			return null;
 		}
@@ -165,7 +173,7 @@ public class Identification extends DefaultVisitor {
 	@Override
 	public Object visit(Variable variable, Object param) {
 
-		VarDefinition varDefinition = varDefinitions.get(variable.getName());
+		VarDefinition varDefinition = varDefinitions.getFromAny(variable.getName());
 
 		if (varDefinition == null) {
 			notifyError("Variable " + variable.getName() + " not defined", variable);
