@@ -7,7 +7,6 @@ package semantic;
 
 import ast.*;
 import ast.definition.FunctionDefinition;
-import ast.definition.VarDefinition;
 import ast.statement.*;
 import ast.expression.*;
 import ast.type.*;
