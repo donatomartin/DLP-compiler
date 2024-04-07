@@ -13,19 +13,19 @@ import visitor.Visitor;
 // %% -------------------------------
 
 /*
-	logicBinary: expression -> left:expression operator:string right:expression
+	comparison: expression -> left:expression operator:string right:expression
 	expression -> 
 	
 	PHASE TypeChecking
 	expression -> type:type
 	expression -> lvalue:boolean
 */
-public class LogicBinary extends AbstractExpression  {
+public class Comparison extends AbstractExpression  {
 
     // ----------------------------------
     // Instance Variables
 
-	// logicBinary: expression -> left:expression operator:string right:expression
+	// comparison: expression -> left:expression operator:string right:expression
 	private Expression left;
 	private String operator;
 	private Expression right;
@@ -33,7 +33,7 @@ public class LogicBinary extends AbstractExpression  {
     // ----------------------------------
     // Constructors
 
-	public LogicBinary(Expression left, String operator, Expression right) {
+	public Comparison(Expression left, String operator, Expression right) {
 		super();
 
 		if (left == null)
@@ -51,7 +51,7 @@ public class LogicBinary extends AbstractExpression  {
 		updatePositions(left, operator, right);
 	}
 
-	public LogicBinary(Object left, Object operator, Object right) {
+	public Comparison(Object left, Object operator, Object right) {
 		super();
 
         if (left == null)
@@ -71,7 +71,7 @@ public class LogicBinary extends AbstractExpression  {
 
 
     // ----------------------------------
-    // logicBinary: expression -> left:expression operator:string right:expression
+    // comparison: expression -> left:expression operator:string right:expression
 
 	// Child 'left:expression' 
 
@@ -125,7 +125,7 @@ public class LogicBinary extends AbstractExpression  {
 
     @Override
     public String toString() {
-        return "LogicBinary{" + " left=" + this.getLeft() + " operator=" + this.getOperator() + " right=" + this.getRight() + "}";
+        return "Comparison{" + " left=" + this.getLeft() + " operator=" + this.getOperator() + " right=" + this.getRight() + "}";
     }
 
 

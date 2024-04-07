@@ -130,37 +130,47 @@ public class TypeChecking extends DefaultVisitor {
 	}
 
 	// class Print(Expression expression)
+	// phase TypeChecking { FunctionDefinition function }
 	@Override
 	public Object visit(Print print, Object param) {
 
 		// print.getExpression().accept(this, param);
 		super.visit(print, param);
 
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// print.setFunction(?);
 		return null;
 	}
 
 	// class Read(Expression expression)
+	// phase TypeChecking { FunctionDefinition function }
 	@Override
 	public Object visit(Read read, Object param) {
 
 		// read.getExpression().accept(this, param);
 		super.visit(read, param);
 
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// read.setFunction(?);
 		return null;
 	}
 
 	// class FunctionCallStatement(String name, List<Expression> expressions)
 	// phase Identification { FunctionDefinition functionDefinition }
+	// phase TypeChecking { FunctionDefinition function }
 	@Override
 	public Object visit(FunctionCallStatement functionCallStatement, Object param) {
 
 		// functionCallStatement.getExpressions().forEach(expression -> expression.accept(this, param));
 		super.visit(functionCallStatement, param);
 
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// functionCallStatement.setFunction(?);
 		return null;
 	}
 
 	// class Assignment(Expression left, Expression right)
+	// phase TypeChecking { FunctionDefinition function }
 	@Override
 	public Object visit(Assignment assignment, Object param) {
 
@@ -168,10 +178,13 @@ public class TypeChecking extends DefaultVisitor {
 		// assignment.getRight().accept(this, param);
 		super.visit(assignment, param);
 
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// assignment.setFunction(?);
 		return null;
 	}
 
 	// class Conditional(Expression expression, List<Statement> ifStatements, List<Statement> elseStatements)
+	// phase TypeChecking { FunctionDefinition function }
 	@Override
 	public Object visit(Conditional conditional, Object param) {
 
@@ -180,10 +193,13 @@ public class TypeChecking extends DefaultVisitor {
 		// conditional.getElseStatements().forEach(statement -> statement.accept(this, param));
 		super.visit(conditional, param);
 
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// conditional.setFunction(?);
 		return null;
 	}
 
 	// class While(Expression expression, List<Statement> loopStatements)
+	// phase TypeChecking { FunctionDefinition function }
 	@Override
 	public Object visit(While whileValue, Object param) {
 
@@ -191,16 +207,21 @@ public class TypeChecking extends DefaultVisitor {
 		// whileValue.getLoopStatements().forEach(statement -> statement.accept(this, param));
 		super.visit(whileValue, param);
 
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// whileValue.setFunction(?);
 		return null;
 	}
 
 	// class Return(Optional<Expression> expression)
+	// phase TypeChecking { FunctionDefinition function }
 	@Override
 	public Object visit(Return returnValue, Object param) {
 
 		// returnValue.getExpression().ifPresent(expression -> expression.accept(this, param));
 		super.visit(returnValue, param);
 
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// returnValue.setFunction(?);
 		return null;
 	}
 
@@ -359,6 +380,21 @@ public class TypeChecking extends DefaultVisitor {
 		// TODO: Remember to initialize SYNTHESIZED attributes <-----
 		// arithmetic.setType(?);
 		// arithmetic.setLvalue(?);
+		return null;
+	}
+
+	// class Comparison(Expression left, String operator, Expression right)
+	// phase TypeChecking { Type type, boolean lvalue }
+	@Override
+	public Object visit(Comparison comparison, Object param) {
+
+		// comparison.getLeft().accept(this, param);
+		// comparison.getRight().accept(this, param);
+		super.visit(comparison, param);
+
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// comparison.setType(?);
+		// comparison.setLvalue(?);
 		return null;
 	}
 

@@ -123,6 +123,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Print(Expression expression)
+	// phase TypeChecking { FunctionDefinition function }
 	@Override
 	public Object visit(Print print, Object param) {
 
@@ -133,6 +134,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Read(Expression expression)
+	// phase TypeChecking { FunctionDefinition function }
 	@Override
 	public Object visit(Read read, Object param) {
 
@@ -144,6 +146,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 
 	// class FunctionCallStatement(String name, List<Expression> expressions)
 	// phase Identification { FunctionDefinition functionDefinition }
+	// phase TypeChecking { FunctionDefinition function }
 	@Override
 	public Object visit(FunctionCallStatement functionCallStatement, Object param) {
 
@@ -154,6 +157,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Assignment(Expression left, Expression right)
+	// phase TypeChecking { FunctionDefinition function }
 	@Override
 	public Object visit(Assignment assignment, Object param) {
 
@@ -165,6 +169,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Conditional(Expression expression, List<Statement> ifStatements, List<Statement> elseStatements)
+	// phase TypeChecking { FunctionDefinition function }
 	@Override
 	public Object visit(Conditional conditional, Object param) {
 
@@ -177,6 +182,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class While(Expression expression, List<Statement> loopStatements)
+	// phase TypeChecking { FunctionDefinition function }
 	@Override
 	public Object visit(While whileValue, Object param) {
 
@@ -188,6 +194,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Return(Optional<Expression> expression)
+	// phase TypeChecking { FunctionDefinition function }
 	@Override
 	public Object visit(Return returnValue, Object param) {
 
@@ -324,6 +331,18 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 		// arithmetic.getLeft().accept(this, param);
 		// arithmetic.getRight().accept(this, param);
 		super.visit(arithmetic, param);
+
+		return null;
+	}
+
+	// class Comparison(Expression left, String operator, Expression right)
+	// phase TypeChecking { Type type, boolean lvalue }
+	@Override
+	public Object visit(Comparison comparison, Object param) {
+
+		// comparison.getLeft().accept(this, param);
+		// comparison.getRight().accept(this, param);
+		super.visit(comparison, param);
 
 		return null;
 	}

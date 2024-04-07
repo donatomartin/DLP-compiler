@@ -3,6 +3,7 @@
 package ast.statement;
 
 import ast.expression.*;
+import ast.definition.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Stream;
@@ -17,6 +18,9 @@ import visitor.Visitor;
 /*
 	while: statement -> expression:expression loopStatements:statement*
 	statement -> 
+	
+	PHASE TypeChecking
+	statement -> function:functionDefinition
 */
 public class While extends AbstractStatement  {
 

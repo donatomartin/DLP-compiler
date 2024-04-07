@@ -334,6 +334,17 @@ public class Identification extends DefaultVisitor {
 		return null;
 	}
 
+	// class Comparison(Expression left, String operator, Expression right)
+	@Override
+	public Object visit(Comparison comparison, Object param) {
+
+		// comparison.getLeft().accept(this, param);
+		// comparison.getRight().accept(this, param);
+		super.visit(comparison, param);
+
+		return null;
+	}
+
 	// class LogicBinary(Expression left, String operator, Expression right)
 	@Override
 	public Object visit(LogicBinary logicBinary, Object param) {

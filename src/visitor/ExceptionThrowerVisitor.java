@@ -179,6 +179,12 @@ public class ExceptionThrowerVisitor implements Visitor {
 	}
 
 	@Override
+	public Object visit(Comparison comparison, Object param) {
+
+        throw new UnsupportedOperationException("'ExceptionThrowerVisitor.visit(Comparison)' has been invoked but it has not been implemented.");
+	}
+
+	@Override
 	public Object visit(LogicBinary logicBinary, Object param) {
 
         throw new UnsupportedOperationException("'ExceptionThrowerVisitor.visit(LogicBinary)' has been invoked but it has not been implemented.");

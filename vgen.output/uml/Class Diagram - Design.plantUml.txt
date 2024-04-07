@@ -33,6 +33,7 @@ AST <|-[#808080]- Definition
 interface Statement {
 }
 AST <|-[#808080]- Statement
+Statement -[#3366cc,thickness=3]-  FunctionDefinition #text:3366cc : function >
 
 interface Type {
 }
@@ -190,6 +191,13 @@ class Arithmetic {
 Expression <|-[#808080]- Arithmetic
 Arithmetic o-[#404040,thickness=2]-  Expression : left >
 Arithmetic o-[#404040,thickness=2]-  Expression : right >
+
+class Comparison {
+	+String operator
+}
+Expression <|-[#808080]- Comparison
+Comparison o-[#404040,thickness=2]-  Expression : left >
+Comparison o-[#404040,thickness=2]-  Expression : right >
 
 class LogicBinary {
 	+String operator

@@ -1144,7 +1144,7 @@ public class GrammarParser extends Parser {
 						}
 						setState(273);
 						((ExpressionContext)_localctx).right = ((ExpressionContext)_localctx).expression = expression(5);
-						 ((ExpressionContext)_localctx).ast =  new LogicBinary(((ExpressionContext)_localctx).left.ast, ((ExpressionContext)_localctx).operator, ((ExpressionContext)_localctx).right.ast); 
+						 ((ExpressionContext)_localctx).ast =  new Comparison(((ExpressionContext)_localctx).left.ast, ((ExpressionContext)_localctx).operator, ((ExpressionContext)_localctx).right.ast); 
 						}
 						break;
 					case 4:
@@ -1167,7 +1167,7 @@ public class GrammarParser extends Parser {
 						}
 						setState(278);
 						((ExpressionContext)_localctx).right = ((ExpressionContext)_localctx).expression = expression(4);
-						 ((ExpressionContext)_localctx).ast =  new LogicBinary(((ExpressionContext)_localctx).left.ast, ((ExpressionContext)_localctx).operator, ((ExpressionContext)_localctx).right.ast); 
+						 ((ExpressionContext)_localctx).ast =  new Comparison(((ExpressionContext)_localctx).left.ast, ((ExpressionContext)_localctx).operator, ((ExpressionContext)_localctx).right.ast); 
 						}
 						break;
 					case 5:
@@ -1195,7 +1195,7 @@ public class GrammarParser extends Parser {
 						((ExpressionContext)_localctx).operator = match(T__34);
 						setState(288);
 						((ExpressionContext)_localctx).right = ((ExpressionContext)_localctx).expression = expression(2);
-						 ((ExpressionContext)_localctx).ast =  new LogicBinary(((ExpressionContext)_localctx).left.ast, ((ExpressionContext)_localctx).operator, ((ExpressionContext)_localctx).right.ast); 
+						 ((ExpressionContext)_localctx).ast =  new LogicUnary(((ExpressionContext)_localctx).left.ast, ((ExpressionContext)_localctx).operator, ((ExpressionContext)_localctx).right.ast); 
 						}
 						break;
 					case 7:

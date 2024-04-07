@@ -38,6 +38,7 @@ structAccess:expression -> expression string;
 arrayAccess:expression -> left:expression right:expression;
 cast:expression -> castType:type expression;
 arithmetic:expression -> left:expression operator:string right:expression;
+comparison:expression -> left:expression operator:string right:expression;
 logicBinary:expression -> left:expression operator:string right:expression;
 logicUnary:expression -> operator:string expression;
 
@@ -52,3 +53,4 @@ ATTRIBUTE GRAMMAR TypeChecking
 
 expression -> type;
 expression -> lvalue:boolean;
+statement -> function:functionDefinition;

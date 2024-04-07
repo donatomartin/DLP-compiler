@@ -210,6 +210,14 @@ public class DefaultVisitor implements Visitor {
 	}
 
 	@Override
+	public Object visit(Comparison comparison, Object param) {
+
+		comparison.getLeft().accept(this, param);
+		comparison.getRight().accept(this, param);
+		return null;
+	}
+
+	@Override
 	public Object visit(LogicBinary logicBinary, Object param) {
 
 		logicBinary.getLeft().accept(this, param);

@@ -42,6 +42,7 @@ AST <|-[#808080]- Statement
 abstract AbstractStatement
 Statement <|-[#808080]- AbstractStatement
 AbstractAST <|-[#808080]- AbstractStatement
+Statement -[#3366cc,thickness=3]-  FunctionDefinition #text:3366cc : function >
 
 interface Type {
 }
@@ -204,6 +205,13 @@ class Arithmetic {
 AbstractExpression <|-[#808080]- Arithmetic
 Arithmetic o-[#404040,thickness=2]-  Expression : left >
 Arithmetic o-[#404040,thickness=2]-  Expression : right >
+
+class Comparison {
+	+String operator
+}
+AbstractExpression <|-[#808080]- Comparison
+Comparison o-[#404040,thickness=2]-  Expression : left >
+Comparison o-[#404040,thickness=2]-  Expression : right >
 
 class LogicBinary {
 	+String operator

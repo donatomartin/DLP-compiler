@@ -56,6 +56,7 @@ expression returns[Expression ast]
     | left=expression right=expression    { $ast = new ArrayAccess($left.ast, $right.ast); }     
     | type expression                     { $ast = new Cast($type.ast, $expression.ast); }       
     | left=expression operator=IDENT right=expression { $ast = new Arithmetic($left.ast, $operator, $right.ast); }
+    | left=expression operator=IDENT right=expression { $ast = new Comparison($left.ast, $operator, $right.ast); }
     | left=expression operator=IDENT right=expression { $ast = new LogicBinary($left.ast, $operator, $right.ast); }
     | operator=IDENT expression           { $ast = new LogicUnary($operator, $expression.ast); } 
 	;

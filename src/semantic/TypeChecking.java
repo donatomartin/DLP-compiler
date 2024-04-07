@@ -6,7 +6,8 @@
 package semantic;
 
 import ast.*;
-import ast.definition.*;
+import ast.definition.FunctionDefinition;
+import ast.definition.VarDefinition;
 import ast.statement.*;
 import ast.expression.*;
 import ast.type.*;
@@ -30,9 +31,61 @@ public class TypeChecking extends DefaultVisitor {
     // ----------------------------------------------------------
     // Visit methods
 
+
+    // class FunctionDefinition(String name, List<VarDefinition> varDefinitions, Optional<Type> type, List<Definition> definitions, List<Statement> statements)
+	@Override
+	public Object visit(FunctionDefinition functionDefinition, Object param) {
+
+        super.visit(functionDefinition, param);
+
+        if (functionDefinition.getType().isPresent()) {
+            Type returnType = functionDefinition.getType().get();
+            for (Statement statement : functionDefinition.getStatements()) {
+                if (statement instanceof Return) {
+                    Return returnStatement = (Return) statement;
+                    if (returnStatement.getExpression().isPresent()) {
+                        Expression returnExpression = returnStatement.getExpression().get();
+                        predicate(sameType(returnType, returnExpression.getType()), "Return type does not match function return type", returnStatement);
+                    }
+                }
+            }
+        }
+
+		return null;
+	}
+
+    // class Print(Expression expression)
+	// phase TypeChecking { FunctionDefinition function }
+	@Override
+	public Object visit(Print print, Object param) {
+
+		super.visit(print, param);
+
+        Expression expression = print.getExpression();
+        predicate(isPrimitive(expression.getType()), "Expression must be of numeric type", print);
+
+		return null;
+	}
+
+    // class Read(Expression expression)
+	// phase TypeChecking { FunctionDefinition function }
+	@Override
+	public Object visit(Read read, Object param) {
+
+		// read.getExpression().accept(this, param);
+		super.visit(read, param);
+
+        Expression expression = read.getExpression();
+        predicate(isPrimitive(expression.getType()), "Expression must be of numeric type", read);
+
+		return null;
+	}
+
     // class Assignment(Expression left, Expression right)
 	@Override
 	public Object visit(Assignment assignment, Object param) {
+
+        super.visit(assignment, param);
 
         Expression left = assignment.getLeft();
         Expression right = assignment.getRight();
@@ -40,7 +93,166 @@ public class TypeChecking extends DefaultVisitor {
         predicate(sameType(left.getType(), right.getType()), "Types of left and right expressions do not match", assignment);
         predicate(left.isLvalue(), "Left expression must be an lvalue", assignment);
         
-        super.visit(assignment, param);
+		return null;
+	}
+
+    // class Conditional(Expression expression, List<Statement> ifStatements, List<Statement> elseStatements)
+	// phase TypeChecking { FunctionDefinition function }
+	@Override
+	public Object visit(Conditional conditional, Object param) {
+
+        super.visit(conditional, param);
+
+        Expression expression = conditional.getExpression();
+        predicate(expression.getType() instanceof IntType, "Expression must be of boolean type", conditional);
+
+        for (Statement statement : conditional.getIfStatements()) {
+            statement.setFunction(conditional.getFunction());
+        }
+
+        for (Statement statement : conditional.getElseStatements()) {
+            statement.setFunction(conditional.getFunction());
+        }
+
+		return null;
+	}
+
+    // class While(Expression expression, List<Statement> loopStatements)
+	// phase TypeChecking { FunctionDefinition function }
+	@Override
+	public Object visit(While whileValue, Object param) {
+
+		super.visit(whileValue, param);
+
+        Expression expression = whileValue.getExpression();
+        predicate(expression.getType() instanceof IntType, "Expression must be of boolean type", whileValue);
+
+        for (Statement statement : whileValue.getLoopStatements()) {
+            statement.setFunction(whileValue.getFunction());
+        }
+		
+		return null;
+	}
+
+    // class Return(Optional<Expression> expression)
+	// phase TypeChecking { FunctionDefinition function }
+    @Override
+    public Object visit(Return returnValue, Object param) {
+
+        super.visit(returnValue, param);
+
+        if (returnValue.getExpression().isEmpty()) {
+            predicate(returnValue.getFunction().getType().isEmpty(), "Return type does not match function empty return type", returnValue);
+        }
+
+        else {
+            Expression expression = returnValue.getExpression().get();
+            predicate(sameType(returnValue.getFunction().getType().get(), expression.getType()), "Return type does not match function return type", returnValue);
+        }
+
+
+        return null;
+    }
+
+    // class Variable(String name)
+	// phase Identification { VarDefinition varDefinition }
+	// phase TypeChecking { Type type, boolean lvalue }
+	@Override
+	public Object visit(Variable variable, Object param) {
+
+		variable.setType(variable.getVarDefinition().getType());
+		variable.setLvalue(true);
+
+		return null;
+	}
+
+    // class IntLiteral(int intValue)
+	// phase TypeChecking { Type type, boolean lvalue }
+	@Override
+	public Object visit(IntLiteral intLiteral, Object param) {
+
+        intLiteral.setType(new IntType());
+        intLiteral.setLvalue(false);
+		
+		return null;
+	}
+
+	// class FloatLiteral(float floatValue)
+	// phase TypeChecking { Type type, boolean lvalue }
+	@Override
+	public Object visit(FloatLiteral floatLiteral, Object param) {
+
+		floatLiteral.setType(new FloatType());
+        floatLiteral.setLvalue(false);
+
+		return null;
+	}
+
+	// class CharLiteral(char charValue)
+	// phase TypeChecking { Type type, boolean lvalue }
+	@Override
+	public Object visit(CharLiteral charLiteral, Object param) {
+
+		charLiteral.setType(new CharType());
+        charLiteral.setLvalue(false);
+
+		return null;
+	}
+
+    // class FunctionCallExpression(String name, List<Expression> expressions)
+	// phase Identification { FunctionDefinition functionDefinition }
+	// phase TypeChecking { Type type, boolean lvalue }
+	@Override
+	public Object visit(FunctionCallExpression functionCallExpression, Object param) {
+
+		super.visit(functionCallExpression, param);
+
+		functionCallExpression.setLvalue(false);
+        functionCallExpression.setType(functionCallExpression.getFunctionDefinition().getType().get());
+
+		return null;
+	}
+
+    // class StructAccess(Expression expression, String name)
+	// phase TypeChecking { Type type, boolean lvalue }
+	@Override
+	public Object visit(StructAccess structAccess, Object param) {
+
+		super.visit(structAccess, param);
+
+		structAccess.setLvalue(true);
+		structAccess.setType(new StructType(structAccess.getName()));
+
+		return null;
+	}
+
+	// class ArrayAccess(Expression left, Expression right)
+	// phase TypeChecking { Type type, boolean lvalue }
+	@Override
+	public Object visit(ArrayAccess arrayAccess, Object param) {
+
+		super.visit(arrayAccess, param);
+
+		arrayAccess.setLvalue(true);
+		arrayAccess.setType(arrayAccess.getLeft().getType());
+
+		return null;
+	}
+
+     // class Cast(Type castType, Expression expression)
+	// phase TypeChecking { Type type, boolean lvalue }
+	@Override
+	public Object visit(Cast cast, Object param) {
+
+		super.visit(cast, param);
+
+        Type castType = cast.getCastType();
+        Expression expression = cast.getExpression();
+
+        predicate(!sameType(castType, expression.getType()), "Types of cast and expression already match", cast);
+        
+		cast.setType(cast.getCastType());
+		cast.setLvalue(false);
 
 		return null;
 	}
@@ -49,6 +261,8 @@ public class TypeChecking extends DefaultVisitor {
 	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
 	public Object visit(Arithmetic arithmetic, Object param) {
+        
+        super.visit(arithmetic, param);
 
         Expression left = arithmetic.getLeft();
         Expression right = arithmetic.getRight();
@@ -65,36 +279,74 @@ public class TypeChecking extends DefaultVisitor {
         arithmetic.setLvalue(false);
         arithmetic.setType(left.getType());
 
-		super.visit(arithmetic, param);
-
 		return null;
 	}
 
-    // class Cast(Type castType, Expression expression)
+    // class Comparison(Expression left, String operator, Expression right)
+	// phase TypeChecking { Type type, boolean lvalue }
+    @Override
+    public Object visit(Comparison comparison, Object param) {
+
+        super.visit(comparison, param);
+
+        predicate(isNum(comparison.getLeft().getType()), "Left operand of comparison operator must be of numeric type", comparison);
+        predicate(isNum(comparison.getRight().getType()), "Right operand of comparison operator must be of numeric type", comparison);
+        
+        comparison.setType(new IntType());
+        comparison.setLvalue(false);
+
+        return null;
+    }
+
+    // class LogicBinary(Expression left, String operator, Expression right)
 	// phase TypeChecking { Type type, boolean lvalue }
 	@Override
-	public Object visit(Cast cast, Object param) {
+	public Object visit(LogicBinary logicBinary, Object param) {
 
-        Type castType = cast.getCastType();
-        Expression expression = cast.getExpression();
+		super.visit(logicBinary, param);
 
-        predicate(sameType(castType, expression.getType()), "Types of cast and expression already match", cast);
-        
-		cast.setType(cast.getCastType());
-		cast.setLvalue(false);
+        predicate(isNum(logicBinary.getLeft().getType()), "Left operand of logical binary operator must be of boolean type", logicBinary);
+        predicate(isNum(logicBinary.getRight().getType()), "Right operand of logical binary operator must be of boolean type", logicBinary);
+		
+        logicBinary.setType(new IntType());
+        logicBinary.setLvalue(false);
 
-		super.visit(cast, param);
+		return null;
+
+	}
+
+    // class LogicUnary(String operator, Expression expression)
+	// phase TypeChecking { Type type, boolean lvalue }
+	@Override
+	public Object visit(LogicUnary logicUnary, Object param) {
+
+		// logicUnary.getExpression().accept(this, param);
+		super.visit(logicUnary, param);
+
+		predicate(isNum(logicUnary.getExpression().getType()), "Operand of logical unary operator must be of boolean type", logicUnary);
+
+        logicUnary.setType(new IntType());
+        logicUnary.setLvalue(false);
 
 		return null;
 	}
-
-    
 
     // ----------------------------------------------------------
     // Auxiliary methods
 
     private boolean sameType(Type typeA, Type typeB) {
+        if (typeA == null || typeB == null)
+            return false;
+
         return typeA.equals(typeB);
+    }
+
+    private boolean isNum(Type typeA) {
+        return typeA instanceof IntType || typeA instanceof FloatType;
+    }
+
+    private boolean isPrimitive(Type typeA) {
+        return typeA instanceof IntType || typeA instanceof FloatType || typeA instanceof CharType;
     }
 
     private void notifyError(String errorMessage, Position position) {
