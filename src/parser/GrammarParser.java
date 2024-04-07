@@ -1195,7 +1195,7 @@ public class GrammarParser extends Parser {
 						((ExpressionContext)_localctx).operator = match(T__34);
 						setState(288);
 						((ExpressionContext)_localctx).right = ((ExpressionContext)_localctx).expression = expression(2);
-						 ((ExpressionContext)_localctx).ast =  new LogicUnary(((ExpressionContext)_localctx).left.ast, ((ExpressionContext)_localctx).operator, ((ExpressionContext)_localctx).right.ast); 
+						 ((ExpressionContext)_localctx).ast =  new LogicBinary(((ExpressionContext)_localctx).left.ast, ((ExpressionContext)_localctx).operator, ((ExpressionContext)_localctx).right.ast); 
 						}
 						break;
 					case 7:

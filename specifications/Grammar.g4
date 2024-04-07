@@ -69,7 +69,7 @@ expression returns [Expression ast]
 	| left=expression operator=('<'|'>'|'<='|'>=') right=expression { $ast = new Comparison($left.ast, $operator, $right.ast); }
 	| left=expression operator=('!='|'==') right=expression { $ast = new Comparison($left.ast, $operator, $right.ast); }
 	| left=expression operator='&&' right=expression { $ast = new LogicBinary($left.ast, $operator, $right.ast); }
-	| left=expression operator='||' right=expression { $ast = new LogicUnary($left.ast, $operator, $right.ast); }
+	| left=expression operator='||' right=expression { $ast = new LogicBinary($left.ast, $operator, $right.ast); }
 	;
 
 type returns [Type ast]
