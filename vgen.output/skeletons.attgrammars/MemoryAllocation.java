@@ -107,6 +107,15 @@ public class MemoryAllocation extends DefaultVisitor {
 			// functionDefinition.setAddress(?);
 		}
 
+        for (var fieldDefinition : program.definitions()
+                .filter(FieldDefinition.class::isInstance)
+                .map(FieldDefinition.class::cast)
+                .toList()) {
+
+			// TODO: Remember to initialize INHERITED attributes <----
+			// fieldDefinition.setAddress(?);
+		}
+
 		// program.getDefinitions().forEach(definition -> definition.accept(this, param));
 		super.visit(program, param);
 
@@ -175,6 +184,15 @@ public class MemoryAllocation extends DefaultVisitor {
 
 			// TODO: Remember to initialize INHERITED attributes <----
 			// functionDefinition_.setAddress(functionDefinition.getAddress());
+		}
+
+        for (var fieldDefinition : functionDefinition.definitions()
+                .filter(FieldDefinition.class::isInstance)
+                .map(FieldDefinition.class::cast)
+                .toList()) {
+
+			// TODO: Remember to initialize INHERITED attributes <----
+			// fieldDefinition.setAddress(functionDefinition.getAddress());
 		}
 
 		// functionDefinition.getVarDefinitions().forEach(varDefinition -> varDefinition.accept(this, param));

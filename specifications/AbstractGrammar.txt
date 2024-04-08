@@ -12,7 +12,7 @@ program -> definition*;
 varDefinition:definition -> string type;
 structDefinition:definition -> string fieldDefinition*;
 functionDefinition:definition -> string varDefinition* type? definition* statement*;
-fieldDefinition -> string type;
+fieldDefinition:definition -> string type;
 
 print:statement -> expression;
 read:statement -> expression;

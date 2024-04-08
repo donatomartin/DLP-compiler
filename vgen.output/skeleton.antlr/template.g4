@@ -18,6 +18,7 @@ definition returns[Definition ast]
     : name=IDENT type                     { $ast = new VarDefinition($name, $type.ast); }        
     | name=IDENT fieldDefinitions+=fieldDefinition* { $ast = new StructDefinition($name, $fieldDefinitions); }
     | name=IDENT varDefinitions+=varDefinition* type? definitions+=definition* statements+=statement* { $ast = new FunctionDefinition($name, $varDefinitions, ($type.ctx == null) ? null : $type.ast, $definitions, $statements); }
+    | name=IDENT type                     { $ast = new FieldDefinition($name, $type.ast); }      
 	;
 
 type returns[Type ast]

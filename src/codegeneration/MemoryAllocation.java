@@ -1,10 +1,7 @@
 package codegeneration;
 
 import ast.*;
-import ast.definition.Definition;
-import ast.definition.FunctionDefinition;
-import ast.definition.StructDefinition;
-import ast.definition.VarDefinition;
+import ast.definition.*;
 import visitor.DefaultVisitor;
 
 public class MemoryAllocation extends DefaultVisitor {

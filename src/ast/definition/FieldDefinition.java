@@ -1,6 +1,6 @@
 // Generated with VGen 2.0.0
 
-package ast;
+package ast.definition;
 
 import ast.type.*;
 import org.antlr.v4.runtime.Token;
@@ -12,18 +12,20 @@ import visitor.Visitor;
 
 // %% -------------------------------
 
+
 /*
-	fieldDefinition -> name:string type:type
+	fieldDefinition: definition -> name:string type:type
+	definition -> 
 	
 	PHASE MemoryAllocation
 	fieldDefinition -> address:int
 */
-public class FieldDefinition extends AbstractAST  {
+public class FieldDefinition extends AbstractDefinition  {
 
     // ----------------------------------
     // Instance Variables
 
-	// fieldDefinition -> string type
+	// fieldDefinition: definition -> string type
 	private String name;
 	private Type type;
 
@@ -63,7 +65,7 @@ public class FieldDefinition extends AbstractAST  {
 
 
     // ----------------------------------
-    // fieldDefinition -> string type
+    // fieldDefinition: definition -> string type
 
 	// Child 'string' 
 
@@ -128,4 +130,5 @@ public class FieldDefinition extends AbstractAST  {
         // Methods/attributes in this section will be preserved. Delete if not needed
 
     // %% --------------------------------------
+
 }

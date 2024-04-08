@@ -93,7 +93,7 @@ class FieldDefinition {
 	..<color:#669900> MemoryAllocation </color>..
 	+<color:#669900>int address</color>
 }
-AbstractAST <|-[#808080]- FieldDefinition
+AbstractDefinition <|-[#808080]- FieldDefinition
 FieldDefinition o-[#404040,thickness=2]-  Type : type >
 
 class Print {
