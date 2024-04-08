@@ -63,12 +63,16 @@ Program o-[#404040,thickness=2]- "✱" Definition : definitions >
 
 class VarDefinition {
 	+String name
+	..<color:#669900> MemoryAllocation </color>..
+	+<color:#669900>int address</color>
 }
 AbstractDefinition <|-[#808080]- VarDefinition
 VarDefinition o-[#404040,thickness=2]-  Type : type >
 
 class StructDefinition {
 	+String name
+	..<color:#669900> MemoryAllocation </color>..
+	+<color:#669900>int address</color>
 }
 AbstractDefinition <|-[#808080]- StructDefinition
 StructDefinition o-[#404040,thickness=2]- "✱" Field : fields >

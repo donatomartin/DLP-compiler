@@ -2,6 +2,7 @@
 
 package ast.type;
 
+import ast.Field;
 import ast.definition.*;
 import org.antlr.v4.runtime.Token;
 import visitor.Visitor;
@@ -105,7 +106,13 @@ public class StructType extends AbstractType  {
 
     // %% User Members -------------------------
 
-        // Methods/attributes in this section will be preserved. Delete if not needed
+    public int getSize() {
+		int size = 0;
+		for (Field field : structDefinition.getFields()) {
+			size += field.getType().getSize();
+		}
+		return size;
+	}
 
     // %% --------------------------------------
 }
