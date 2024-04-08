@@ -96,11 +96,11 @@ public class Identification extends DefaultVisitor {
 		return null;
 	}
 
-	// class StructDefinition(String name, List<Field> fields)
+	// class StructDefinition(String name, List<FieldDefinition> fieldDefinitions)
 	@Override
 	public Object visit(StructDefinition structDefinition, Object param) {
 
-		// structDefinition.getFields().forEach(field -> field.accept(this, param));
+		// structDefinition.getFieldDefinitions().forEach(fieldDefinition -> fieldDefinition.accept(this, param));
 		super.visit(structDefinition, param);
 
 		return null;
@@ -119,12 +119,12 @@ public class Identification extends DefaultVisitor {
 		return null;
 	}
 
-	// class Field(String name, Type type)
+	// class FieldDefinition(String name, Type type)
 	@Override
-	public Object visit(Field field, Object param) {
+	public Object visit(FieldDefinition fieldDefinition, Object param) {
 
-		// field.getType().accept(this, param);
-		super.visit(field, param);
+		// fieldDefinition.getType().accept(this, param);
+		super.visit(fieldDefinition, param);
 
 		return null;
 	}

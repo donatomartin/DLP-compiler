@@ -42,7 +42,7 @@ public class DefaultVisitor implements Visitor {
 	@Override
 	public Object visit(StructDefinition structDefinition, Object param) {
 
-		structDefinition.getFields().forEach(field -> field.accept(this, param));
+		structDefinition.getFieldDefinitions().forEach(fieldDefinition -> fieldDefinition.accept(this, param));
 		return null;
 	}
 
@@ -57,9 +57,9 @@ public class DefaultVisitor implements Visitor {
 	}
 
 	@Override
-	public Object visit(Field field, Object param) {
+	public Object visit(FieldDefinition fieldDefinition, Object param) {
 
-		field.getType().accept(this, param);
+		fieldDefinition.getType().accept(this, param);
 		return null;
 	}
 

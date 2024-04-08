@@ -32,13 +32,13 @@ public class GrammarParser extends Parser {
 		INT_LITERAL=39, FLOAT_LITERAL=40, CHAR_LITERAL=41, IDENT=42, LINE_COMMENT=43, 
 		MULTILINE_COMMENT=44, WHITESPACE=45;
 	public static final int
-		RULE_program = 0, RULE_definition = 1, RULE_functionDefinition = 2, RULE_fields = 3, 
-		RULE_field = 4, RULE_parameters = 5, RULE_parameter = 6, RULE_statement = 7, 
+		RULE_program = 0, RULE_definition = 1, RULE_functionDefinition = 2, RULE_fieldDefinitions = 3, 
+		RULE_fieldDefinition = 4, RULE_parameters = 5, RULE_parameter = 6, RULE_statement = 7, 
 		RULE_expression = 8, RULE_type = 9;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"program", "definition", "functionDefinition", "fields", "field", "parameters", 
-			"parameter", "statement", "expression", "type"
+			"program", "definition", "functionDefinition", "fieldDefinitions", "fieldDefinition", 
+			"parameters", "parameter", "statement", "expression", "type"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -174,14 +174,14 @@ public class GrammarParser extends Parser {
 		public Definition ast;
 		public Token IDENT;
 		public TypeContext type;
-		public FieldsContext fields;
+		public FieldDefinitionsContext fieldDefinitions;
 		public FunctionDefinitionContext functionDefinition;
 		public TerminalNode IDENT() { return getToken(GrammarParser.IDENT, 0); }
 		public TypeContext type() {
 			return getRuleContext(TypeContext.class,0);
 		}
-		public FieldsContext fields() {
-			return getRuleContext(FieldsContext.class,0);
+		public FieldDefinitionsContext fieldDefinitions() {
+			return getRuleContext(FieldDefinitionsContext.class,0);
 		}
 		public FunctionDefinitionContext functionDefinition() {
 			return getRuleContext(FunctionDefinitionContext.class,0);
@@ -226,7 +226,7 @@ public class GrammarParser extends Parser {
 				setState(38);
 				match(T__4);
 				setState(39);
-				((DefinitionContext)_localctx).fields = fields();
+				((DefinitionContext)_localctx).fieldDefinitions = fieldDefinitions();
 				setState(40);
 				match(T__5);
 				setState(42);
@@ -239,7 +239,7 @@ public class GrammarParser extends Parser {
 					}
 				}
 
-				 ((DefinitionContext)_localctx).ast =  new StructDefinition(((DefinitionContext)_localctx).IDENT, ((DefinitionContext)_localctx).fields.list); 
+				 ((DefinitionContext)_localctx).ast =  new StructDefinition(((DefinitionContext)_localctx).IDENT, ((DefinitionContext)_localctx).fieldDefinitions.list); 
 				}
 				break;
 			case IDENT:
@@ -427,24 +427,24 @@ public class GrammarParser extends Parser {
 	}
 
 	@SuppressWarnings("CheckReturnValue")
-	public static class FieldsContext extends ParserRuleContext {
-		public List<Field> list = new ArrayList<Field>();
-		public FieldContext field;
-		public List<FieldContext> field() {
-			return getRuleContexts(FieldContext.class);
+	public static class FieldDefinitionsContext extends ParserRuleContext {
+		public List<FieldDefinition> list = new ArrayList<FieldDefinition>();
+		public FieldDefinitionContext fieldDefinition;
+		public List<FieldDefinitionContext> fieldDefinition() {
+			return getRuleContexts(FieldDefinitionContext.class);
 		}
-		public FieldContext field(int i) {
-			return getRuleContext(FieldContext.class,i);
+		public FieldDefinitionContext fieldDefinition(int i) {
+			return getRuleContext(FieldDefinitionContext.class,i);
 		}
-		public FieldsContext(ParserRuleContext parent, int invokingState) {
+		public FieldDefinitionsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_fields; }
+		@Override public int getRuleIndex() { return RULE_fieldDefinitions; }
 	}
 
-	public final FieldsContext fields() throws RecognitionException {
-		FieldsContext _localctx = new FieldsContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_fields);
+	public final FieldDefinitionsContext fieldDefinitions() throws RecognitionException {
+		FieldDefinitionsContext _localctx = new FieldDefinitionsContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_fieldDefinitions);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -456,8 +456,8 @@ public class GrammarParser extends Parser {
 				{
 				{
 				setState(95);
-				((FieldsContext)_localctx).field = field();
-				_localctx.list.add(((FieldsContext)_localctx).field.ast);
+				((FieldDefinitionsContext)_localctx).fieldDefinition = fieldDefinition();
+				_localctx.list.add(((FieldDefinitionsContext)_localctx).fieldDefinition.ast);
 				}
 				}
 				setState(102);
@@ -478,35 +478,35 @@ public class GrammarParser extends Parser {
 	}
 
 	@SuppressWarnings("CheckReturnValue")
-	public static class FieldContext extends ParserRuleContext {
-		public Field ast;
+	public static class FieldDefinitionContext extends ParserRuleContext {
+		public FieldDefinition ast;
 		public Token IDENT;
 		public TypeContext type;
 		public TerminalNode IDENT() { return getToken(GrammarParser.IDENT, 0); }
 		public TypeContext type() {
 			return getRuleContext(TypeContext.class,0);
 		}
-		public FieldContext(ParserRuleContext parent, int invokingState) {
+		public FieldDefinitionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_field; }
+		@Override public int getRuleIndex() { return RULE_fieldDefinition; }
 	}
 
-	public final FieldContext field() throws RecognitionException {
-		FieldContext _localctx = new FieldContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_field);
+	public final FieldDefinitionContext fieldDefinition() throws RecognitionException {
+		FieldDefinitionContext _localctx = new FieldDefinitionContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_fieldDefinition);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(103);
-			((FieldContext)_localctx).IDENT = match(IDENT);
+			((FieldDefinitionContext)_localctx).IDENT = match(IDENT);
 			setState(104);
 			match(T__1);
 			setState(105);
-			((FieldContext)_localctx).type = type();
+			((FieldDefinitionContext)_localctx).type = type();
 			setState(106);
 			match(T__2);
-			 ((FieldContext)_localctx).ast =  new Field(((FieldContext)_localctx).IDENT, ((FieldContext)_localctx).type.ast); 
+			 ((FieldDefinitionContext)_localctx).ast =  new FieldDefinition(((FieldDefinitionContext)_localctx).IDENT, ((FieldDefinitionContext)_localctx).type.ast); 
 			}
 		}
 		catch (RecognitionException re) {

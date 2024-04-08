@@ -2,7 +2,7 @@
 
 package ast.type;
 
-import ast.Field;
+import ast.FieldDefinition;
 import ast.definition.*;
 import org.antlr.v4.runtime.Token;
 import visitor.Visitor;
@@ -108,7 +108,7 @@ public class StructType extends AbstractType  {
 
     public int getSize() {
 		int size = 0;
-		for (Field field : structDefinition.getFields()) {
+		for (FieldDefinition field : structDefinition.getFieldDefinitions()) {
 			size += field.getType().getSize();
 		}
 		return size;

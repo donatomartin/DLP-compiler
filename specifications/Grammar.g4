@@ -16,7 +16,7 @@ program returns [Program ast]
 
 definition returns [Definition ast]
 	: 'var' IDENT ':' type ';' { $ast = new VarDefinition($IDENT, $type.ast); }
-	| 'struct' IDENT '{' fields '}' ';'? { $ast = new StructDefinition($IDENT, $fields.list); } // TODO: comprobar si los structs llevan ; al final
+	| 'struct' IDENT '{' fieldDefinitions '}' ';'? { $ast = new StructDefinition($IDENT, $fieldDefinitions.list); } // TODO: comprobar si los structs llevan ; al final
 	| functionDefinition { $ast = $functionDefinition.ast; }
 	;
 
@@ -25,12 +25,12 @@ functionDefinition returns [FunctionDefinition ast]
 	| IDENT '(' parameters ')' '{' definitions+=definition* statements+=statement* '}'  { $ast = new FunctionDefinition($IDENT, $parameters.list, null, $definitions, $statements); }
 	;
 
-fields returns [List<Field> list = new ArrayList<Field>()] // TODO: reducir fields y parameters a EBNF
-	: (field {$list.add($field.ast);})*
+fieldDefinitions returns [List<FieldDefinition> list = new ArrayList<FieldDefinition>()] // TODO: reducir fields y parameters a EBNF
+	: (fieldDefinition {$list.add($fieldDefinition.ast);})*
 	;
 
-field returns [Field ast]
-	: IDENT ':' type ';' { $ast = new Field($IDENT, $type.ast); }
+fieldDefinition returns [FieldDefinition ast]
+	: IDENT ':' type ';' { $ast = new FieldDefinition($IDENT, $type.ast); }
 	;
 
 parameters returns [List<VarDefinition> list = new ArrayList<VarDefinition>()]

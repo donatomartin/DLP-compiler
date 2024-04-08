@@ -61,10 +61,12 @@ class StructDefinition {
 	+<color:#669900>int address</color>
 }
 Definition <|-[#808080]- StructDefinition
-StructDefinition o-[#404040,thickness=2]- "✱" Field : fields >
+StructDefinition o-[#404040,thickness=2]- "✱" FieldDefinition : fieldDefinitions >
 
 class FunctionDefinition {
 	+String name
+	..<color:#669900> MemoryAllocation </color>..
+	+<color:#669900>int address</color>
 }
 Definition <|-[#808080]- FunctionDefinition
 FunctionDefinition o-[#404040,thickness=2]- "✱" VarDefinition : varDefinitions >
@@ -72,11 +74,13 @@ FunctionDefinition o-[#404040,thickness=2]- "0..1" Type : type >
 FunctionDefinition o-[#404040,thickness=2]- "✱" Definition : definitions >
 FunctionDefinition o-[#404040,thickness=2]- "✱" Statement : statements >
 
-class Field {
+class FieldDefinition {
 	+String name
+	..<color:#669900> MemoryAllocation </color>..
+	+<color:#669900>int address</color>
 }
-AST <|-[#808080]- Field
-Field o-[#404040,thickness=2]-  Type : type >
+AST <|-[#808080]- FieldDefinition
+FieldDefinition o-[#404040,thickness=2]-  Type : type >
 
 class Print {
 }

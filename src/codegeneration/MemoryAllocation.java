@@ -1,12 +1,11 @@
 package codegeneration;
 
 import ast.*;
+import ast.definition.Definition;
 import ast.definition.FunctionDefinition;
 import ast.definition.StructDefinition;
 import ast.definition.VarDefinition;
 import visitor.DefaultVisitor;
-
-// This class will be implemented in memory allocation phase
 
 public class MemoryAllocation extends DefaultVisitor {
 
@@ -19,66 +18,63 @@ public class MemoryAllocation extends DefaultVisitor {
 
         int currentAddress = 0;
 
-        for (var varDefinition : program.definitions()
-                .filter(VarDefinition.class::isInstance)
-                .map(VarDefinition.class::cast)
-                .toList()) {
+        for (var definition : program.getDefinitions()) {
 
-            varDefinition.accept(this, param);
+			if (definition instanceof VarDefinition) {
+                VarDefinition varDefinition = (VarDefinition) definition;
+                varDefinition.setAddress(currentAddress);
+                currentAddress += varDefinition.getType().getSize();
+            }
 
-			varDefinition.setAddress(currentAddress);
+            if (definition instanceof StructDefinition) {
+                StructDefinition structDefinition = (StructDefinition) definition;
+                structDefinition.setAddress(currentAddress);
 
-            currentAddress += varDefinition.getType().getSize();
-		}
+                for (FieldDefinition fieldDefinition : structDefinition.getFieldDefinitions()) {
+                    fieldDefinition.setAddress(currentAddress);
+                    currentAddress += fieldDefinition.getType().getSize();
+                }
+            }
 
-        for (var structDefinition : program.definitions()
-                .filter(StructDefinition.class::isInstance)
-                .map(StructDefinition.class::cast)
-                .toList()) {
+            if (definition instanceof FunctionDefinition) {
+                
+                FunctionDefinition functionDefinition = (FunctionDefinition) definition;
 
-			structDefinition.accept(this, param);
+                for (VarDefinition varDefinition : functionDefinition.getVarDefinitions()) {
+                    varDefinition.setAddress(currentAddress);
+                    currentAddress += varDefinition.getType().getSize();
+                }
 
-            structDefinition.setAddress(currentAddress);
+                currentAddress += 4; // Return address
+                functionDefinition.setAddress(currentAddress);
 
-            for (Field field : structDefinition.getFields()) {
-                field.setAddress(currentAddress);
-                currentAddress += field.getType().getSize();
+                for (Definition localDefinition : functionDefinition.getDefinitions()) {
+                    
+                    if (localDefinition instanceof VarDefinition) {
+                        VarDefinition varDefinition = (VarDefinition) localDefinition;
+                        varDefinition.setAddress(currentAddress);
+                        currentAddress += varDefinition.getType().getSize();
+                    }
+
+                    if (localDefinition instanceof StructDefinition) {
+                        StructDefinition structDefinition = (StructDefinition) localDefinition;
+                        structDefinition.setAddress(currentAddress);
+
+                        for (FieldDefinition fieldDefinition : structDefinition.getFieldDefinitions()) {
+                            fieldDefinition.setAddress(currentAddress);
+                            currentAddress += fieldDefinition.getType().getSize();
+                        }
+                    }
+                    
+                }
+
             }
 
 		}
 
-		// program.getDefinitions().forEach(definition -> definition.accept(this, param));
-		super.visit(program, param);
+        super.visit(program, param);
 
 		return null;
 	}
-
-    // class FunctionDefinition(String name, List<VarDefinition> varDefinitions, Optional<Type> type, List<Definition> definitions, List<Statement> statements)
-	@Override
-	public Object visit(FunctionDefinition functionDefinition, Object param) {
-
-		for (var varDefinition : functionDefinition.getVarDefinitions()) {
-			// TODO: Remember to initialize INHERITED attributes <----
-			// varDefinition.setAddress(?);
-		}
-
-        for (var varDefinition : functionDefinition.definitions()
-                .filter(VarDefinition.class::isInstance)
-                .map(VarDefinition.class::cast)
-                .toList()) {
-
-			// TODO: Remember to initialize INHERITED attributes <----
-			// varDefinition.setAddress(?);
-		}
-
-        for (var structDefinition : functionDefinition.definitions()
-                .filter(StructDefinition.class::isInstance)
-                .map(StructDefinition.class::cast)
-                .toList()) {
-
-			// TODO: Remember to initialize INHERITED attributes <----
-			// structDefinition.setAddress(?);
-		}
-    }
 
 }

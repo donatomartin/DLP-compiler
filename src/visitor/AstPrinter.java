@@ -141,11 +141,11 @@ public class AstPrinter implements Visitor {
 
 		// Imprimir los hijos (y recorrer si son nodos del AST)
         printNonNodeChild(indent + 1, "name", "String", structDefinition.getName());
-        printListOfNodesChild(indent + 1, "fields", "List<Field>", structDefinition.getFields());
+        printListOfNodesChild(indent + 1, "fieldDefinitions", "List<FieldDefinition>", structDefinition.getFieldDefinitions());
 
 		// Imprimir el 'toString()' de los atributos (pero no recorrer)
         printToString(indent + 1, "vgen-attribute-phase-2", "address", "int", structDefinition.getAddress());
-		printUnknownFields(indent + 1, structDefinition, "name", "fields", "address");
+		printUnknownFields(indent + 1, structDefinition, "name", "fieldDefinitions", "address");
 		return null;
 	}
 
@@ -162,21 +162,23 @@ public class AstPrinter implements Visitor {
         printListOfNodesChild(indent + 1, "statements", "List<Statement>", functionDefinition.getStatements());
 
 		// Imprimir el 'toString()' de los atributos (pero no recorrer)
-		printUnknownFields(indent + 1, functionDefinition, "name", "varDefinitions", "type", "definitions", "statements");
+        printToString(indent + 1, "vgen-attribute-phase-2", "address", "int", functionDefinition.getAddress());
+		printUnknownFields(indent + 1, functionDefinition, "name", "varDefinitions", "type", "definitions", "statements", "address");
 		return null;
 	}
 
 	@Override
-	public Object visit(Field field, Object param) {
+	public Object visit(FieldDefinition fieldDefinition, Object param) {
 
 		int indent = ((Integer)param);
 
 		// Imprimir los hijos (y recorrer si son nodos del AST)
-        printNonNodeChild(indent + 1, "name", "String", field.getName());
-        printNodeChild(indent + 1, "type", "Type", field.getType());
+        printNonNodeChild(indent + 1, "name", "String", fieldDefinition.getName());
+        printNodeChild(indent + 1, "type", "Type", fieldDefinition.getType());
 
 		// Imprimir el 'toString()' de los atributos (pero no recorrer)
-		printUnknownFields(indent + 1, field, "name", "type");
+        printToString(indent + 1, "vgen-attribute-phase-2", "address", "int", fieldDefinition.getAddress());
+		printUnknownFields(indent + 1, fieldDefinition, "name", "type", "address");
 		return null;
 	}
 

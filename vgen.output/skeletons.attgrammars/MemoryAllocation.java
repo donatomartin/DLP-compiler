@@ -98,6 +98,15 @@ public class MemoryAllocation extends DefaultVisitor {
 			// structDefinition.setAddress(?);
 		}
 
+        for (var functionDefinition : program.definitions()
+                .filter(FunctionDefinition.class::isInstance)
+                .map(FunctionDefinition.class::cast)
+                .toList()) {
+
+			// TODO: Remember to initialize INHERITED attributes <----
+			// functionDefinition.setAddress(?);
+		}
+
 		// program.getDefinitions().forEach(definition -> definition.accept(this, param));
 		super.visit(program, param);
 
@@ -115,24 +124,30 @@ public class MemoryAllocation extends DefaultVisitor {
 		return null;
 	}
 
-	// class StructDefinition(String name, List<Field> fields)
+	// class StructDefinition(String name, List<FieldDefinition> fieldDefinitions)
 	// phase MemoryAllocation { int address }
 	@Override
 	public Object visit(StructDefinition structDefinition, Object param) {
 
-		// structDefinition.getFields().forEach(field -> field.accept(this, param));
+		for (var fieldDefinition : structDefinition.getFieldDefinitions()) {
+			// TODO: Remember to initialize INHERITED attributes <----
+			// fieldDefinition.setAddress(structDefinition.getAddress());
+		}
+
+		// structDefinition.getFieldDefinitions().forEach(fieldDefinition -> fieldDefinition.accept(this, param));
 		super.visit(structDefinition, param);
 
 		return null;
 	}
 
 	// class FunctionDefinition(String name, List<VarDefinition> varDefinitions, Optional<Type> type, List<Definition> definitions, List<Statement> statements)
+	// phase MemoryAllocation { int address }
 	@Override
 	public Object visit(FunctionDefinition functionDefinition, Object param) {
 
 		for (var varDefinition : functionDefinition.getVarDefinitions()) {
 			// TODO: Remember to initialize INHERITED attributes <----
-			// varDefinition.setAddress(?);
+			// varDefinition.setAddress(functionDefinition.getAddress());
 		}
 
         for (var varDefinition : functionDefinition.definitions()
@@ -141,7 +156,7 @@ public class MemoryAllocation extends DefaultVisitor {
                 .toList()) {
 
 			// TODO: Remember to initialize INHERITED attributes <----
-			// varDefinition.setAddress(?);
+			// varDefinition.setAddress(functionDefinition.getAddress());
 		}
 
         for (var structDefinition : functionDefinition.definitions()
@@ -150,7 +165,16 @@ public class MemoryAllocation extends DefaultVisitor {
                 .toList()) {
 
 			// TODO: Remember to initialize INHERITED attributes <----
-			// structDefinition.setAddress(?);
+			// structDefinition.setAddress(functionDefinition.getAddress());
+		}
+
+        for (var functionDefinition_ : functionDefinition.definitions()
+                .filter(FunctionDefinition.class::isInstance)
+                .map(FunctionDefinition.class::cast)
+                .toList()) {
+
+			// TODO: Remember to initialize INHERITED attributes <----
+			// functionDefinition_.setAddress(functionDefinition.getAddress());
 		}
 
 		// functionDefinition.getVarDefinitions().forEach(varDefinition -> varDefinition.accept(this, param));
@@ -162,12 +186,13 @@ public class MemoryAllocation extends DefaultVisitor {
 		return null;
 	}
 
-	// class Field(String name, Type type)
+	// class FieldDefinition(String name, Type type)
+	// phase MemoryAllocation { int address }
 	@Override
-	public Object visit(Field field, Object param) {
+	public Object visit(FieldDefinition fieldDefinition, Object param) {
 
-		// field.getType().accept(this, param);
-		super.visit(field, param);
+		// fieldDefinition.getType().accept(this, param);
+		super.visit(fieldDefinition, param);
 
 		return null;
 	}

@@ -10,10 +10,9 @@ NODES
 program -> definition*;
 
 varDefinition:definition -> string type;
-structDefinition:definition -> string field*;
+structDefinition:definition -> string fieldDefinition*;
 functionDefinition:definition -> string varDefinition* type? definition* statement*;
-
-field -> string type;
+fieldDefinition -> string type;
 
 print:statement -> expression;
 read:statement -> expression;
@@ -59,4 +58,5 @@ ATTRIBUTE GRAMMAR MemoryAllocation
 
 varDefinition -> [inh] address:int;
 structDefinition -> [inh] address:int;
-field -> [ihn] address:int;
+fieldDefinition -> [inh] address:int;
+functionDefinition -> [inh] address:int;

@@ -18,7 +18,7 @@ public class Identification extends DefaultVisitor {
 	private ContextMap<FunctionDefinition> functionDefinitions = new ContextMap<>();
 	private ContextMap<VarDefinition> varDefinitions = new ContextMap<>();
 	private ContextMap<StructDefinition> structDefinitions = new ContextMap<>();
-	private ContextMap<Field> fieldDefinitions = new ContextMap<>();
+	private ContextMap<FieldDefinition> fieldDefinitions = new ContextMap<>();
 
     public Identification(ErrorManager errorManager) {
         this.errorManager = errorManager;
@@ -103,7 +103,7 @@ public class Identification extends DefaultVisitor {
 
 		structDefinitions.put(structDefinition.getName(), structDefinition);
 
-		structDefinition.getFields().forEach(field -> field.accept(this, param));
+		structDefinition.getFieldDefinitions().forEach(field -> field.accept(this, param));
 
 		return null;
 	}
@@ -120,7 +120,7 @@ public class Identification extends DefaultVisitor {
 			return null;
 		}
 
-		for (Field field : structDefinition.getFields()) {
+		for (FieldDefinition field : structDefinition.getFieldDefinitions()) {
 			field.accept(this, param);
 		}
 
@@ -131,7 +131,7 @@ public class Identification extends DefaultVisitor {
 
 	// class Field(String name, Type type)
 	@Override
-	public Object visit(Field field, Object param) {
+	public Object visit(FieldDefinition field, Object param) {
 
 		if (fieldDefinitions.getFromTop(field.getName()) != null) {
 			notifyError("Field " + field.getName() + " already defined", field);

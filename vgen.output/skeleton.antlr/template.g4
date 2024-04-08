@@ -16,7 +16,7 @@ program returns[Program ast]
 
 definition returns[Definition ast]
     : name=IDENT type                     { $ast = new VarDefinition($name, $type.ast); }        
-    | name=IDENT fields+=field*           { $ast = new StructDefinition($name, $fields); }       
+    | name=IDENT fieldDefinitions+=fieldDefinition* { $ast = new StructDefinition($name, $fieldDefinitions); }
     | name=IDENT varDefinitions+=varDefinition* type? definitions+=definition* statements+=statement* { $ast = new FunctionDefinition($name, $varDefinitions, ($type.ctx == null) ? null : $type.ast, $definitions, $statements); }
 	;
 
@@ -28,8 +28,8 @@ type returns[Type ast]
     | name=IDENT                          { $ast = new StructType($name); }                      
 	;
 
-field returns[Field ast]
-    : name=IDENT type                     { $ast = new Field($name, $type.ast); }                
+fieldDefinition returns[FieldDefinition ast]
+    : name=IDENT type                     { $ast = new FieldDefinition($name, $type.ast); }      
 	;
 
 varDefinition returns[VarDefinition ast]

@@ -16,7 +16,7 @@ import visitor.Visitor;
 // %% -------------------------------
 
 /*
-	structDefinition: definition -> name:string fields:field*
+	structDefinition: definition -> name:string fieldDefinitions:fieldDefinition*
 	definition -> 
 	
 	PHASE MemoryAllocation
@@ -27,9 +27,9 @@ public class StructDefinition extends AbstractDefinition  {
     // ----------------------------------
     // Instance Variables
 
-	// structDefinition: definition -> string field*
+	// structDefinition: definition -> string fieldDefinition*
 	private String name;
-	private List<Field> fields;
+	private List<FieldDefinition> fieldDefinitions;
 
     // PHASE MemoryAllocation
 	private int address;
@@ -37,34 +37,34 @@ public class StructDefinition extends AbstractDefinition  {
     // ----------------------------------
     // Constructors
 
-	public StructDefinition(String name, List<Field> fields) {
+	public StructDefinition(String name, List<FieldDefinition> fieldDefinitions) {
 		super();
 
 		if (name == null)
 			throw new IllegalArgumentException("Parameter 'name' can't be null. Pass a non-null value or use 'string?' in the abstract grammar");
 		this.name = name;
 
-		if (fields == null)
-			fields = new ArrayList<>();
-		this.fields = fields;
+		if (fieldDefinitions == null)
+			fieldDefinitions = new ArrayList<>();
+		this.fieldDefinitions = fieldDefinitions;
 
-		updatePositions(name, fields);
+		updatePositions(name, fieldDefinitions);
 	}
 
-	public StructDefinition(Object name, Object fields) {
+	public StructDefinition(Object name, Object fieldDefinitions) {
 		super();
 
         if (name == null)
             throw new IllegalArgumentException("Parameter 'name' can't be null. Pass a non-null value or use 'string?' in the abstract grammar");
 		this.name = (name instanceof Token) ? ((Token) name).getText() : (String) name;
 
-        this.fields = castList(fields, unwrapIfContext.andThen(Field.class::cast));
-		updatePositions(name, fields);
+        this.fieldDefinitions = castList(fieldDefinitions, unwrapIfContext.andThen(FieldDefinition.class::cast));
+		updatePositions(name, fieldDefinitions);
 	}
 
 
     // ----------------------------------
-    // structDefinition: definition -> string field*
+    // structDefinition: definition -> string fieldDefinition*
 
 	// Child 'string' 
 
@@ -80,21 +80,21 @@ public class StructDefinition extends AbstractDefinition  {
     }
 
 
-	// Child 'field*' 
+	// Child 'fieldDefinition*' 
 
-	public void setFields(List<Field> fields) {
-		if (fields == null)
-			fields = new ArrayList<>();
-		this.fields = fields;
+	public void setFieldDefinitions(List<FieldDefinition> fieldDefinitions) {
+		if (fieldDefinitions == null)
+			fieldDefinitions = new ArrayList<>();
+		this.fieldDefinitions = fieldDefinitions;
 
 	}
 
-    public List<Field> getFields() {
-        return fields;
+    public List<FieldDefinition> getFieldDefinitions() {
+        return fieldDefinitions;
     }
 
-    public Stream<Field> fields() {
-        return fields.stream();
+    public Stream<FieldDefinition> fieldDefinitions() {
+        return fieldDefinitions.stream();
     }
 
 
@@ -124,7 +124,7 @@ public class StructDefinition extends AbstractDefinition  {
 
     @Override
     public String toString() {
-        return "StructDefinition{" + " name=" + this.getName() + " fields=" + this.getFields() + "}";
+        return "StructDefinition{" + " name=" + this.getName() + " fieldDefinitions=" + this.getFieldDefinitions() + "}";
     }
 
 

@@ -47,9 +47,9 @@ public class ExceptionThrowerVisitor implements Visitor {
 	}
 
 	@Override
-	public Object visit(Field field, Object param) {
+	public Object visit(FieldDefinition fieldDefinition, Object param) {
 
-        throw new UnsupportedOperationException("'ExceptionThrowerVisitor.visit(Field)' has been invoked but it has not been implemented.");
+        throw new UnsupportedOperationException("'ExceptionThrowerVisitor.visit(FieldDefinition)' has been invoked but it has not been implemented.");
 	}
 
 	@Override

@@ -13,21 +13,27 @@ import visitor.Visitor;
 // %% -------------------------------
 
 /*
-	field -> name:string type:type
+	fieldDefinition -> name:string type:type
+	
+	PHASE MemoryAllocation
+	fieldDefinition -> address:int
 */
-public class Field extends AbstractAST  {
+public class FieldDefinition extends AbstractAST  {
 
     // ----------------------------------
     // Instance Variables
 
-	// field -> string type
+	// fieldDefinition -> string type
 	private String name;
 	private Type type;
+
+    // PHASE MemoryAllocation
+	private int address;
 
     // ----------------------------------
     // Constructors
 
-	public Field(String name, Type type) {
+	public FieldDefinition(String name, Type type) {
 		super();
 
 		if (name == null)
@@ -41,7 +47,7 @@ public class Field extends AbstractAST  {
 		updatePositions(name, type);
 	}
 
-	public Field(Object name, Object type) {
+	public FieldDefinition(Object name, Object type) {
 		super();
 
         if (name == null)
@@ -57,7 +63,7 @@ public class Field extends AbstractAST  {
 
 
     // ----------------------------------
-    // field -> string type
+    // fieldDefinition -> string type
 
 	// Child 'string' 
 
@@ -87,6 +93,22 @@ public class Field extends AbstractAST  {
     }
 
 
+
+    // --------------------------------
+    // PHASE MemoryAllocation
+
+	// Attribute 'address:int' 
+
+	public void setAddress(int address) {
+		this.address = address;
+
+	}
+
+    public int getAddress() {
+        return address;
+    }
+
+
     // ----------------------------------
     // Helper methods
 
@@ -97,7 +119,7 @@ public class Field extends AbstractAST  {
 
     @Override
     public String toString() {
-        return "Field{" + " name=" + this.getName() + " type=" + this.getType() + "}";
+        return "FieldDefinition{" + " name=" + this.getName() + " type=" + this.getType() + "}";
     }
 
 
