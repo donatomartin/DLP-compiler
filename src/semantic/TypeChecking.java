@@ -201,16 +201,19 @@ public class TypeChecking extends DefaultVisitor {
     // class FunctionCallExpression(String name, List<Expression> expressions)
 	// phase Identification { FunctionDefinition functionDefinition }
 	// phase TypeChecking { Type type, boolean lvalue }
-	@Override
-	public Object visit(FunctionCallExpression functionCallExpression, Object param) {
+@Override
+public Object visit(FunctionCallExpression functionCallExpression, Object param) {
 
-		super.visit(functionCallExpression, param);
+    super.visit(functionCallExpression, param);
 
-		functionCallExpression.setLvalue(false);
+    functionCallExpression.setLvalue(false);
+    
+    if (functionCallExpression.getFunctionDefinition().getType().isPresent()) {
         functionCallExpression.setType(functionCallExpression.getFunctionDefinition().getType().get());
+    }
 
-		return null;
-	}
+    return null;
+}
 
     // class StructAccess(Expression expression, String name)
 	// phase TypeChecking { Type type, boolean lvalue }

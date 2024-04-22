@@ -12,7 +12,6 @@ import visitor.Visitor;
 
 // %% -------------------------------
 
-
 /*
 	fieldDefinition: definition -> name:string type:type
 	definition -> 
@@ -130,5 +129,4 @@ public class FieldDefinition extends AbstractDefinition  {
         // Methods/attributes in this section will be preserved. Delete if not needed
 
     // %% --------------------------------------
-
 }

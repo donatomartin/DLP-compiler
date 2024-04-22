@@ -60,3 +60,14 @@ varDefinition -> [inh] address:int;
 structDefinition -> [inh] address:int;
 fieldDefinition -> [inh] address:int;
 functionDefinition -> [inh] address:int;
+
+// -----------------------
+CODE SPECIFICATION Mapl
+
+run[program]
+execute[statement]
+value[expression]
+address[expression]
+
+metadata[program]
+metadata[varDefinition]

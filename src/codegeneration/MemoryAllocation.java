@@ -33,45 +33,38 @@ public class MemoryAllocation extends DefaultVisitor {
                 }
             }
 
-            if (definition instanceof FunctionDefinition) {
-                
-                FunctionDefinition functionDefinition = (FunctionDefinition) definition;
-
-                for (VarDefinition varDefinition : functionDefinition.getVarDefinitions()) {
-                    varDefinition.setAddress(currentAddress);
-                    currentAddress += varDefinition.getType().getSize();
-                }
-
-                currentAddress += 4; // Return address
-                functionDefinition.setAddress(currentAddress);
-
-                for (Definition localDefinition : functionDefinition.getDefinitions()) {
-                    
-                    if (localDefinition instanceof VarDefinition) {
-                        VarDefinition varDefinition = (VarDefinition) localDefinition;
-                        varDefinition.setAddress(currentAddress);
-                        currentAddress += varDefinition.getType().getSize();
-                    }
-
-                    if (localDefinition instanceof StructDefinition) {
-                        StructDefinition structDefinition = (StructDefinition) localDefinition;
-                        structDefinition.setAddress(currentAddress);
-
-                        for (FieldDefinition fieldDefinition : structDefinition.getFieldDefinitions()) {
-                            fieldDefinition.setAddress(currentAddress);
-                            currentAddress += fieldDefinition.getType().getSize();
-                        }
-                    }
-                    
-                }
-
-            }
+            definition.accept(this, param);
 
 		}
 
-        super.visit(program, param);
-
 		return null;
+	}
+
+    // class FunctionDefinition(String name, List<VarDefinition> varDefinitions, Optional<Type> type, List<Definition> definitions, List<Statement> statements)
+	// phase MemoryAllocation { int address }
+	@Override
+	public Object visit(FunctionDefinition functionDefinition, Object param) {
+
+
+        // Parameters
+        if (functionDefinition.getVarDefinitions() != null) {
+    
+            int currentAddress = 4;
+    
+            for (var parameter : functionDefinition.getVarDefinitions()) {
+                parameter.setAddress(currentAddress);
+                currentAddress += parameter.getType().getSize();
+            }
+        }
+
+        if (functionDefinition.getType().isPresent()) {
+            functionDefinition.getType().get().accept(this, param);
+        }
+
+        
+        
+
+        return null;
 	}
 
 }
