@@ -22,9 +22,9 @@ public interface Visitor {
 
 	public Object visit(StructDefinition structDefinition, Object param);
 
-	public Object visit(FunctionDefinition functionDefinition, Object param);
-
 	public Object visit(FieldDefinition fieldDefinition, Object param);
+
+	public Object visit(FunctionDefinition functionDefinition, Object param);
 
 	public Object visit(Print print, Object param);
 

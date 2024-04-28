@@ -47,6 +47,7 @@ variable -> varDefinition;
 functionCallStatement -> functionDefinition;
 functionCallExpression -> functionDefinition;
 structType -> structDefinition;
+fieldDefinition -> structDefinition;
 
 ATTRIBUTE GRAMMAR TypeChecking
 

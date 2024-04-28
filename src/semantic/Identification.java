@@ -2,6 +2,9 @@ package semantic;
 
 import visitor.DefaultVisitor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ast.*;
 import ast.definition.*;
 import ast.statement.*;
@@ -13,12 +16,12 @@ import main.ErrorManager;
 
 public class Identification extends DefaultVisitor {
 
-    private ErrorManager errorManager;
-
-	private ContextMap<FunctionDefinition> functionDefinitions = new ContextMap<>();
+	private ErrorManager errorManager;
+	
 	private ContextMap<VarDefinition> varDefinitions = new ContextMap<>();
 	private ContextMap<StructDefinition> structDefinitions = new ContextMap<>();
-	private ContextMap<FieldDefinition> fieldDefinitions = new ContextMap<>();
+	private Map<String,FieldDefinition> fieldDefinitions = new HashMap<>();
+	private Map<String,FunctionDefinition> functionDefinitions = new HashMap<>();
 
     public Identification(ErrorManager errorManager) {
         this.errorManager = errorManager;
@@ -36,7 +39,7 @@ public class Identification extends DefaultVisitor {
 
 		varDefinitions.set();
 
-		if (functionDefinitions.getFromAny(functionDefinition.getName()) != null) {
+		if (functionDefinitions.get(functionDefinition.getName()) != null) {
 			notifyError("Function " + functionDefinition.getName() + " already defined", functionDefinition);
 			varDefinitions.reset();
 			return null;
@@ -59,7 +62,7 @@ public class Identification extends DefaultVisitor {
 	@Override
 	public Object visit(FunctionCallStatement functionCallStatement, Object param) {
 
-		FunctionDefinition functionDefinition = functionDefinitions.getFromAny(functionCallStatement.getName());
+		FunctionDefinition functionDefinition = functionDefinitions.get(functionCallStatement.getName());
 		
 		if (functionDefinition == null) {
 			notifyError("Function " + functionCallStatement.getName() + " not defined", functionCallStatement);
@@ -78,7 +81,7 @@ public class Identification extends DefaultVisitor {
 	@Override
 	public Object visit(FunctionCallExpression functionCallExpression, Object param) {
 
-		FunctionDefinition functionDefinition = functionDefinitions.getFromAny(functionCallExpression.getName());
+		FunctionDefinition functionDefinition = functionDefinitions.get(functionCallExpression.getName());
 		
 		if (functionDefinition == null) {
 			notifyError("Function " + functionCallExpression.getName() + " not defined", functionCallExpression);
@@ -103,6 +106,7 @@ public class Identification extends DefaultVisitor {
 
 		structDefinitions.put(structDefinition.getName(), structDefinition);
 
+		structDefinition.getFieldDefinitions().forEach(field -> field.setStructDefinition(structDefinition));
 		structDefinition.getFieldDefinitions().forEach(field -> field.accept(this, param));
 
 		return null;
@@ -120,10 +124,6 @@ public class Identification extends DefaultVisitor {
 			return null;
 		}
 
-		for (FieldDefinition field : structDefinition.getFieldDefinitions()) {
-			field.accept(this, param);
-		}
-
 		structType.setStructDefinition(structDefinition);
 
 		return null;
@@ -133,14 +133,14 @@ public class Identification extends DefaultVisitor {
 	@Override
 	public Object visit(FieldDefinition field, Object param) {
 
-		if (fieldDefinitions.getFromTop(field.getName()) != null) {
-			notifyError("Field " + field.getName() + " already defined", field);
+		if (fieldDefinitions.get(field.getStructDefinition().getName()+field.getName()) != null) {
+			notifyError("Field " + field.getName() + " already defined in " + field.getStructDefinition().getName(), field);
 			return null;
 		}
 
 		field.getType().accept(this, param);
 
-		fieldDefinitions.put(field.getName(), field);
+		fieldDefinitions.put(field.getStructDefinition().getName()+field.getName(), field);
 
 		return null;
 	}

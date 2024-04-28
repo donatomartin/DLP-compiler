@@ -98,15 +98,6 @@ public class MemoryAllocation extends DefaultVisitor {
 			// structDefinition.setAddress(?);
 		}
 
-        for (var functionDefinition : program.definitions()
-                .filter(FunctionDefinition.class::isInstance)
-                .map(FunctionDefinition.class::cast)
-                .toList()) {
-
-			// TODO: Remember to initialize INHERITED attributes <----
-			// functionDefinition.setAddress(?);
-		}
-
         for (var fieldDefinition : program.definitions()
                 .filter(FieldDefinition.class::isInstance)
                 .map(FieldDefinition.class::cast)
@@ -114,6 +105,15 @@ public class MemoryAllocation extends DefaultVisitor {
 
 			// TODO: Remember to initialize INHERITED attributes <----
 			// fieldDefinition.setAddress(?);
+		}
+
+        for (var functionDefinition : program.definitions()
+                .filter(FunctionDefinition.class::isInstance)
+                .map(FunctionDefinition.class::cast)
+                .toList()) {
+
+			// TODO: Remember to initialize INHERITED attributes <----
+			// functionDefinition.setAddress(?);
 		}
 
 		// program.getDefinitions().forEach(definition -> definition.accept(this, param));
@@ -149,6 +149,18 @@ public class MemoryAllocation extends DefaultVisitor {
 		return null;
 	}
 
+	// class FieldDefinition(String name, Type type)
+	// phase Identification { StructDefinition structDefinition }
+	// phase MemoryAllocation { int address }
+	@Override
+	public Object visit(FieldDefinition fieldDefinition, Object param) {
+
+		// fieldDefinition.getType().accept(this, param);
+		super.visit(fieldDefinition, param);
+
+		return null;
+	}
+
 	// class FunctionDefinition(String name, List<VarDefinition> parameters, Optional<Type> type, List<VarDefinition> localVariables, List<Statement> statements)
 	// phase MemoryAllocation { int address }
 	@Override
@@ -169,17 +181,6 @@ public class MemoryAllocation extends DefaultVisitor {
 		// functionDefinition.getLocalVariables().forEach(varDefinition -> varDefinition.accept(this, param));
 		// functionDefinition.getStatements().forEach(statement -> statement.accept(this, param));
 		super.visit(functionDefinition, param);
-
-		return null;
-	}
-
-	// class FieldDefinition(String name, Type type)
-	// phase MemoryAllocation { int address }
-	@Override
-	public Object visit(FieldDefinition fieldDefinition, Object param) {
-
-		// fieldDefinition.getType().accept(this, param);
-		super.visit(fieldDefinition, param);
 
 		return null;
 	}

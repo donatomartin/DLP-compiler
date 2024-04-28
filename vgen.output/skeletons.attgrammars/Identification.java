@@ -106,6 +106,19 @@ public class Identification extends DefaultVisitor {
 		return null;
 	}
 
+	// class FieldDefinition(String name, Type type)
+	// phase Identification { StructDefinition structDefinition }
+	@Override
+	public Object visit(FieldDefinition fieldDefinition, Object param) {
+
+		// fieldDefinition.getType().accept(this, param);
+		super.visit(fieldDefinition, param);
+
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// fieldDefinition.setStructDefinition(?);
+		return null;
+	}
+
 	// class FunctionDefinition(String name, List<VarDefinition> parameters, Optional<Type> type, List<VarDefinition> localVariables, List<Statement> statements)
 	@Override
 	public Object visit(FunctionDefinition functionDefinition, Object param) {
@@ -115,16 +128,6 @@ public class Identification extends DefaultVisitor {
 		// functionDefinition.getLocalVariables().forEach(varDefinition -> varDefinition.accept(this, param));
 		// functionDefinition.getStatements().forEach(statement -> statement.accept(this, param));
 		super.visit(functionDefinition, param);
-
-		return null;
-	}
-
-	// class FieldDefinition(String name, Type type)
-	@Override
-	public Object visit(FieldDefinition fieldDefinition, Object param) {
-
-		// fieldDefinition.getType().accept(this, param);
-		super.visit(fieldDefinition, param);
 
 		return null;
 	}

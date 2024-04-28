@@ -101,6 +101,18 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 		return null;
 	}
 
+	// class FieldDefinition(String name, Type type)
+	// phase Identification { StructDefinition structDefinition }
+	// phase MemoryAllocation { int address }
+	@Override
+	public Object visit(FieldDefinition fieldDefinition, Object param) {
+
+		// fieldDefinition.getType().accept(this, param);
+		super.visit(fieldDefinition, param);
+
+		return null;
+	}
+
 	// class FunctionDefinition(String name, List<VarDefinition> parameters, Optional<Type> type, List<VarDefinition> localVariables, List<Statement> statements)
 	// phase MemoryAllocation { int address }
 	@Override
@@ -111,17 +123,6 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 		// functionDefinition.getLocalVariables().forEach(varDefinition -> varDefinition.accept(this, param));
 		// functionDefinition.getStatements().forEach(statement -> statement.accept(this, param));
 		super.visit(functionDefinition, param);
-
-		return null;
-	}
-
-	// class FieldDefinition(String name, Type type)
-	// phase MemoryAllocation { int address }
-	@Override
-	public Object visit(FieldDefinition fieldDefinition, Object param) {
-
-		// fieldDefinition.getType().accept(this, param);
-		super.visit(fieldDefinition, param);
 
 		return null;
 	}
