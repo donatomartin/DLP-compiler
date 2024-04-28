@@ -8,7 +8,7 @@ package semantic;
 import ast.*;
 import ast.definition.FieldDefinition;
 import ast.definition.FunctionDefinition;
-import ast.definition.StructDefinition;
+import ast.definition.VarDefinition;
 import ast.statement.*;
 import ast.expression.*;
 import ast.type.*;
@@ -37,20 +37,24 @@ public class TypeChecking extends DefaultVisitor {
 	@Override
 	public Object visit(FunctionDefinition functionDefinition, Object param) {
 
-        super.visit(functionDefinition, param);
+        for (Statement statement : functionDefinition.getStatements()) {
 
-        if (functionDefinition.getType().isPresent()) {
-            Type returnType = functionDefinition.getType().get();
-            for (Statement statement : functionDefinition.getStatements()) {
-                if (statement instanceof Return) {
-                    Return returnStatement = (Return) statement;
-                    if (returnStatement.getExpression().isPresent()) {
-                        Expression returnExpression = returnStatement.getExpression().get();
-                        predicate(sameType(returnType, returnExpression.getType()), "Return type does not match function return type", returnStatement);
-                    }
-                }
+            statement.setFunction(functionDefinition);
+        }
+
+        if (!functionDefinition.getParameters().isEmpty()) {
+            for (VarDefinition varDefinition : functionDefinition.getParameters()) {
+                varDefinition.accept(this, param);
+                predicate(isPrimitive(varDefinition.getType()), "Parameter must be of primitive type", varDefinition);
             }
         }
+
+        if (functionDefinition.getType().isPresent()) {
+            functionDefinition.getType().get().accept(this, param);
+            predicate(isPrimitive(functionDefinition.getType().get()), "Return type must be of primitive type", functionDefinition);
+        }
+
+        super.visit(functionDefinition, param);
 
 		return null;
 	}
@@ -246,10 +250,18 @@ public class TypeChecking extends DefaultVisitor {
 	@Override
 	public Object visit(ArrayAccess arrayAccess, Object param) {
 
-		super.visit(arrayAccess, param);
+        super.visit(arrayAccess, param);
+
+        predicate(arrayAccess.getLeft().getType() instanceof ArrayType, "Expression must be of array type", arrayAccess);
+
+		if (arrayAccess.getLeft().getType() instanceof ArrayType) {
+
+            predicate(arrayAccess.getRight().getType() instanceof IntType, "Index must be of type IntType", arrayAccess);
+            ArrayType arrayType = (ArrayType) arrayAccess.getLeft().getType();
+            arrayAccess.setType(arrayType.getType());
+        }
 
 		arrayAccess.setLvalue(true);
-		arrayAccess.setType(arrayAccess.getLeft().getType());
 
 		return null;
 	}
@@ -350,9 +362,10 @@ public class TypeChecking extends DefaultVisitor {
     // Auxiliary methods
 
     private boolean sameType(Type typeA, Type typeB) {
-        System.out.println(typeA.getClass() + " " + typeB.getClass());
         if (typeA == null || typeB == null)
             return false;
+
+        System.out.println(typeA.getClass() + " " + typeB.getClass());
         return typeA.getClass().equals(typeB.getClass());
     }
 
