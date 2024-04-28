@@ -44,9 +44,9 @@ public class Identification extends DefaultVisitor {
 
 		functionDefinitions.put(functionDefinition.getName(), functionDefinition);
 
-		functionDefinition.getVarDefinitions().forEach(varDefinition -> varDefinition.accept(this, param));
+		functionDefinition.getParameters().forEach(varDefinition -> varDefinition.accept(this, param));
 		functionDefinition.getType().ifPresent(type -> type.accept(this, param));
-		functionDefinition.getDefinitions().forEach(definition -> definition.accept(this, param));
+		functionDefinition.getLocalVariables().forEach(definition -> definition.accept(this, param));
 		functionDefinition.getStatements().forEach(statement -> statement.accept(this, param));
 
 		varDefinitions.reset();

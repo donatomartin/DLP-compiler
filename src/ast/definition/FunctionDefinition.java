@@ -18,7 +18,7 @@ import visitor.Visitor;
 // %% -------------------------------
 
 /*
-	functionDefinition: definition -> name:string varDefinitions:varDefinition* type:type? definitions:definition* statements:statement*
+	functionDefinition: definition -> name:string parameters:varDefinition* type:type? localVariables:varDefinition* statements:statement*
 	definition -> 
 	
 	PHASE MemoryAllocation
@@ -29,11 +29,11 @@ public class FunctionDefinition extends AbstractDefinition  {
     // ----------------------------------
     // Instance Variables
 
-	// functionDefinition: definition -> string varDefinition* type? definition* statement*
+	// functionDefinition: definition -> string parameters:varDefinition* type? localVariables:varDefinition* statement*
 	private String name;
-	private List<VarDefinition> varDefinitions;
+	private List<VarDefinition> parameters;
 	private Optional<Type> type;
-	private List<Definition> definitions;
+	private List<VarDefinition> localVariables;
 	private List<Statement> statements;
 
     // PHASE MemoryAllocation
@@ -42,49 +42,49 @@ public class FunctionDefinition extends AbstractDefinition  {
     // ----------------------------------
     // Constructors
 
-	public FunctionDefinition(String name, List<VarDefinition> varDefinitions, Optional<Type> type, List<Definition> definitions, List<Statement> statements) {
+	public FunctionDefinition(String name, List<VarDefinition> parameters, Optional<Type> type, List<VarDefinition> localVariables, List<Statement> statements) {
 		super();
 
 		if (name == null)
 			throw new IllegalArgumentException("Parameter 'name' can't be null. Pass a non-null value or use 'string?' in the abstract grammar");
 		this.name = name;
 
-		if (varDefinitions == null)
-			varDefinitions = new ArrayList<>();
-		this.varDefinitions = varDefinitions;
+		if (parameters == null)
+			parameters = new ArrayList<>();
+		this.parameters = parameters;
 
 		if (type == null)
 			type = Optional.empty();
 		this.type = type;
 
-		if (definitions == null)
-			definitions = new ArrayList<>();
-		this.definitions = definitions;
+		if (localVariables == null)
+			localVariables = new ArrayList<>();
+		this.localVariables = localVariables;
 
 		if (statements == null)
 			statements = new ArrayList<>();
 		this.statements = statements;
 
-		updatePositions(name, varDefinitions, type, definitions, statements);
+		updatePositions(name, parameters, type, localVariables, statements);
 	}
 
-	public FunctionDefinition(Object name, Object varDefinitions, Object type, Object definitions, Object statements) {
+	public FunctionDefinition(Object name, Object parameters, Object type, Object localVariables, Object statements) {
 		super();
 
         if (name == null)
             throw new IllegalArgumentException("Parameter 'name' can't be null. Pass a non-null value or use 'string?' in the abstract grammar");
 		this.name = (name instanceof Token) ? ((Token) name).getText() : (String) name;
 
-        this.varDefinitions = castList(varDefinitions, unwrapIfContext.andThen(VarDefinition.class::cast));
+        this.parameters = castList(parameters, unwrapIfContext.andThen(VarDefinition.class::cast));
         this.type = castOptional(type, Type.class);
-        this.definitions = castList(definitions, unwrapIfContext.andThen(Definition.class::cast));
+        this.localVariables = castList(localVariables, unwrapIfContext.andThen(VarDefinition.class::cast));
         this.statements = castList(statements, unwrapIfContext.andThen(Statement.class::cast));
-		updatePositions(name, varDefinitions, type, definitions, statements);
+		updatePositions(name, parameters, type, localVariables, statements);
 	}
 
 
     // ----------------------------------
-    // functionDefinition: definition -> string varDefinition* type? definition* statement*
+    // functionDefinition: definition -> string parameters:varDefinition* type? localVariables:varDefinition* statement*
 
 	// Child 'string' 
 
@@ -100,21 +100,21 @@ public class FunctionDefinition extends AbstractDefinition  {
     }
 
 
-	// Child 'varDefinition*' 
+	// Child 'parameters:varDefinition*' 
 
-	public void setVarDefinitions(List<VarDefinition> varDefinitions) {
-		if (varDefinitions == null)
-			varDefinitions = new ArrayList<>();
-		this.varDefinitions = varDefinitions;
+	public void setParameters(List<VarDefinition> parameters) {
+		if (parameters == null)
+			parameters = new ArrayList<>();
+		this.parameters = parameters;
 
 	}
 
-    public List<VarDefinition> getVarDefinitions() {
-        return varDefinitions;
+    public List<VarDefinition> getParameters() {
+        return parameters;
     }
 
-    public Stream<VarDefinition> varDefinitions() {
-        return varDefinitions.stream();
+    public Stream<VarDefinition> parameters() {
+        return parameters.stream();
     }
 
 
@@ -132,21 +132,21 @@ public class FunctionDefinition extends AbstractDefinition  {
     }
 
 
-	// Child 'definition*' 
+	// Child 'localVariables:varDefinition*' 
 
-	public void setDefinitions(List<Definition> definitions) {
-		if (definitions == null)
-			definitions = new ArrayList<>();
-		this.definitions = definitions;
+	public void setLocalVariables(List<VarDefinition> localVariables) {
+		if (localVariables == null)
+			localVariables = new ArrayList<>();
+		this.localVariables = localVariables;
 
 	}
 
-    public List<Definition> getDefinitions() {
-        return definitions;
+    public List<VarDefinition> getLocalVariables() {
+        return localVariables;
     }
 
-    public Stream<Definition> definitions() {
-        return definitions.stream();
+    public Stream<VarDefinition> localVariables() {
+        return localVariables.stream();
     }
 
 
@@ -194,7 +194,7 @@ public class FunctionDefinition extends AbstractDefinition  {
 
     @Override
     public String toString() {
-        return "FunctionDefinition{" + " name=" + this.getName() + " varDefinitions=" + this.getVarDefinitions() + " type=" + this.getType() + " definitions=" + this.getDefinitions() + " statements=" + this.getStatements() + "}";
+        return "FunctionDefinition{" + " name=" + this.getName() + " parameters=" + this.getParameters() + " type=" + this.getType() + " localVariables=" + this.getLocalVariables() + " statements=" + this.getStatements() + "}";
     }
 
 

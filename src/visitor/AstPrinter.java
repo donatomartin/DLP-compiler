@@ -156,14 +156,14 @@ public class AstPrinter implements Visitor {
 
 		// Imprimir los hijos (y recorrer si son nodos del AST)
         printNonNodeChild(indent + 1, "name", "String", functionDefinition.getName());
-        printListOfNodesChild(indent + 1, "varDefinitions", "List<VarDefinition>", functionDefinition.getVarDefinitions());
+        printListOfNodesChild(indent + 1, "parameters", "List<VarDefinition>", functionDefinition.getParameters());
         printNodeChild(indent + 1, "type", "Optional<Type>", functionDefinition.getType().orElse(null));
-        printListOfNodesChild(indent + 1, "definitions", "List<Definition>", functionDefinition.getDefinitions());
+        printListOfNodesChild(indent + 1, "localVariables", "List<VarDefinition>", functionDefinition.getLocalVariables());
         printListOfNodesChild(indent + 1, "statements", "List<Statement>", functionDefinition.getStatements());
 
 		// Imprimir el 'toString()' de los atributos (pero no recorrer)
         printToString(indent + 1, "vgen-attribute-phase-2", "address", "int", functionDefinition.getAddress());
-		printUnknownFields(indent + 1, functionDefinition, "name", "varDefinitions", "type", "definitions", "statements", "address");
+		printUnknownFields(indent + 1, functionDefinition, "name", "parameters", "type", "localVariables", "statements", "address");
 		return null;
 	}
 
@@ -188,11 +188,11 @@ public class AstPrinter implements Visitor {
 		int indent = ((Integer)param);
 
 		// Imprimir los hijos (y recorrer si son nodos del AST)
-        printNodeChild(indent + 1, "expression", "Expression", print.getExpression());
+        printListOfNodesChild(indent + 1, "expressions", "List<Expression>", print.getExpressions());
 
 		// Imprimir el 'toString()' de los atributos (pero no recorrer)
         printToString(indent + 1, "vgen-attribute-phase-1", "function", "FunctionDefinition", print.getFunction());
-		printUnknownFields(indent + 1, print, "expression", "function");
+		printUnknownFields(indent + 1, print, "expressions", "function");
 		return null;
 	}
 

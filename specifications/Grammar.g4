@@ -20,17 +20,17 @@ definition returns [Definition ast]
 	| functionDefinition { $ast = $functionDefinition.ast; }
 	;
 
-functionDefinition returns [FunctionDefinition ast]
-	: IDENT '(' parameters ')' ':' type '{' definitions+=definition* statements+=statement* '}'  { $ast = new FunctionDefinition($IDENT, $parameters.list, $type.ast, $definitions, $statements); }
-	| IDENT '(' parameters ')' '{' definitions+=definition* statements+=statement* '}'  { $ast = new FunctionDefinition($IDENT, $parameters.list, null, $definitions, $statements); }
-	;
-
 fieldDefinitions returns [List<FieldDefinition> list = new ArrayList<FieldDefinition>()]
 	: (fieldDefinition {$list.add($fieldDefinition.ast);})*
 	;
 
 fieldDefinition returns [FieldDefinition ast]
 	: IDENT ':' type ';' { $ast = new FieldDefinition($IDENT, $type.ast); }
+	;
+
+functionDefinition returns [FunctionDefinition ast]
+	: IDENT '(' parameters ')' ':' type '{' definitions+=definition* statements+=statement* '}'  { $ast = new FunctionDefinition($IDENT, $parameters.list, $type.ast, $definitions, $statements); }
+	| IDENT '(' parameters ')' '{' definitions+=definition* statements+=statement* '}'  { $ast = new FunctionDefinition($IDENT, $parameters.list, null, $definitions, $statements); }
 	;
 
 parameters returns [List<VarDefinition> list = new ArrayList<VarDefinition>()]
@@ -42,7 +42,7 @@ parameter returns [VarDefinition ast]
 	;
 
 statement returns [Statement ast]
-	: ('print'|'printsp' | 'println') e=expression ';' { $ast = new Print($e.ast); }
+	: ('print'|'printsp' | 'println') expressions+=expression (',' expressions+=expression)* ';' { $ast = new Print($expressions); }
 	| 'read' e=expression ';' { $ast = new Read($e.ast); }
 	| IDENT '(' (arguments+=expression (',' arguments+=expression )*)?  ')' ';' { $ast = new FunctionCallStatement($IDENT, $arguments); }
 	| left=expression '=' right=expression ';' { $ast = new Assignment($left.ast, $right.ast); }

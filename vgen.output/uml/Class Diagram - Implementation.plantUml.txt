@@ -83,9 +83,9 @@ class FunctionDefinition {
 	+<color:#669900>int address</color>
 }
 AbstractDefinition <|-[#808080]- FunctionDefinition
-FunctionDefinition o-[#404040,thickness=2]- "✱" VarDefinition : varDefinitions >
+FunctionDefinition o-[#404040,thickness=2]- "✱" VarDefinition : parameters >
 FunctionDefinition o-[#404040,thickness=2]- "0..1" Type : type >
-FunctionDefinition o-[#404040,thickness=2]- "✱" Definition : definitions >
+FunctionDefinition o-[#404040,thickness=2]- "✱" VarDefinition : localVariables >
 FunctionDefinition o-[#404040,thickness=2]- "✱" Statement : statements >
 
 class FieldDefinition {
@@ -99,7 +99,7 @@ FieldDefinition o-[#404040,thickness=2]-  Type : type >
 class Print {
 }
 AbstractStatement <|-[#808080]- Print
-Print o-[#404040,thickness=2]-  Expression : expression >
+Print o-[#404040,thickness=2]- "✱" Expression : expressions >
 
 class Read {
 }

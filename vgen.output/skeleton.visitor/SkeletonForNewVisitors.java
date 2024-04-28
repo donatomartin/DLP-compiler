@@ -101,14 +101,14 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 		return null;
 	}
 
-	// class FunctionDefinition(String name, List<VarDefinition> varDefinitions, Optional<Type> type, List<Definition> definitions, List<Statement> statements)
+	// class FunctionDefinition(String name, List<VarDefinition> parameters, Optional<Type> type, List<VarDefinition> localVariables, List<Statement> statements)
 	// phase MemoryAllocation { int address }
 	@Override
 	public Object visit(FunctionDefinition functionDefinition, Object param) {
 
-		// functionDefinition.getVarDefinitions().forEach(varDefinition -> varDefinition.accept(this, param));
+		// functionDefinition.getParameters().forEach(varDefinition -> varDefinition.accept(this, param));
 		// functionDefinition.getType().ifPresent(type -> type.accept(this, param));
-		// functionDefinition.getDefinitions().forEach(definition -> definition.accept(this, param));
+		// functionDefinition.getLocalVariables().forEach(varDefinition -> varDefinition.accept(this, param));
 		// functionDefinition.getStatements().forEach(statement -> statement.accept(this, param));
 		super.visit(functionDefinition, param);
 
@@ -126,12 +126,12 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 		return null;
 	}
 
-	// class Print(Expression expression)
+	// class Print(List<Expression> expressions)
 	// phase TypeChecking { FunctionDefinition function }
 	@Override
 	public Object visit(Print print, Object param) {
 
-		// print.getExpression().accept(this, param);
+		// print.getExpressions().forEach(expression -> expression.accept(this, param));
 		super.visit(print, param);
 
 		return null;

@@ -13,24 +13,14 @@ public class MemoryAllocation extends DefaultVisitor {
     	@Override
 	public Object visit(Program program, Object param) {
 
-        int currentAddress = 0;
+        int address = 0;
 
         for (var definition : program.getDefinitions()) {
 
 			if (definition instanceof VarDefinition) {
                 VarDefinition varDefinition = (VarDefinition) definition;
-                varDefinition.setAddress(currentAddress);
-                currentAddress += varDefinition.getType().getSize();
-            }
-
-            if (definition instanceof StructDefinition) {
-                StructDefinition structDefinition = (StructDefinition) definition;
-                structDefinition.setAddress(currentAddress);
-
-                for (FieldDefinition fieldDefinition : structDefinition.getFieldDefinitions()) {
-                    fieldDefinition.setAddress(currentAddress);
-                    currentAddress += fieldDefinition.getType().getSize();
-                }
+                varDefinition.setAddress(address);
+                address += varDefinition.getType().getSize();
             }
 
             definition.accept(this, param);
@@ -47,24 +37,51 @@ public class MemoryAllocation extends DefaultVisitor {
 
 
         // Parameters
-        if (functionDefinition.getVarDefinitions() != null) {
+        if (functionDefinition.getParameters() != null) {
     
-            int currentAddress = 4;
+            int address = 4;
     
-            for (var parameter : functionDefinition.getVarDefinitions()) {
-                parameter.setAddress(currentAddress);
-                currentAddress += parameter.getType().getSize();
+            for (var parameter : functionDefinition.getParameters()) {
+                parameter.setAddress(address);
+                address += parameter.getType().getSize();
             }
         }
 
+        // Type
         if (functionDefinition.getType().isPresent()) {
             functionDefinition.getType().get().accept(this, param);
         }
 
-        
-        
+        // Local Variables
+        if (functionDefinition.getLocalVariables() != null) {
+    
+            int address = 0;
+    
+            for (var localVariable : functionDefinition.getLocalVariables()) {
+                localVariable.setAddress(address);
+                address += localVariable.getType().getSize();
+            }
+
+        }
 
         return null;
 	}
+
+    @Override
+    public Object visit(StructDefinition structDefinition, Object param) {
+
+        int address = 0;
+
+        for (var fieldDefinition : structDefinition.getFieldDefinitions()) {
+            fieldDefinition.setAddress(address);
+            address += fieldDefinition.getType().getSize();
+
+            // In case there are nested structs
+            fieldDefinition.accept(this, param);
+        }
+
+        return null;
+    }
+
 
 }

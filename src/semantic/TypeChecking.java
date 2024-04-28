@@ -53,15 +53,16 @@ public class TypeChecking extends DefaultVisitor {
 		return null;
 	}
 
-    // class Print(Expression expression)
+    // class Print(List<Expression> expressions)
 	// phase TypeChecking { FunctionDefinition function }
 	@Override
 	public Object visit(Print print, Object param) {
 
 		super.visit(print, param);
 
-        Expression expression = print.getExpression();
-        predicate(isPrimitive(expression.getType()), "Expression must be of numeric type", print);
+        for (Expression expression : print.getExpressions()) {
+            predicate(isPrimitive(expression.getType()), "Expression must be of numeric type", print);
+        }
 
 		return null;
 	}
@@ -201,19 +202,19 @@ public class TypeChecking extends DefaultVisitor {
     // class FunctionCallExpression(String name, List<Expression> expressions)
 	// phase Identification { FunctionDefinition functionDefinition }
 	// phase TypeChecking { Type type, boolean lvalue }
-@Override
-public Object visit(FunctionCallExpression functionCallExpression, Object param) {
+    @Override
+    public Object visit(FunctionCallExpression functionCallExpression, Object param) {
 
-    super.visit(functionCallExpression, param);
+        super.visit(functionCallExpression, param);
 
-    functionCallExpression.setLvalue(false);
-    
-    if (functionCallExpression.getFunctionDefinition().getType().isPresent()) {
-        functionCallExpression.setType(functionCallExpression.getFunctionDefinition().getType().get());
+        functionCallExpression.setLvalue(false);
+        
+        if (functionCallExpression.getFunctionDefinition().getType().isPresent()) {
+            functionCallExpression.setType(functionCallExpression.getFunctionDefinition().getType().get());
+        }
+
+        return null;
     }
-
-    return null;
-}
 
     // class StructAccess(Expression expression, String name)
 	// phase TypeChecking { Type type, boolean lvalue }
