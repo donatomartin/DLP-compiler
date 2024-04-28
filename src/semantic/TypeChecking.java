@@ -6,7 +6,9 @@
 package semantic;
 
 import ast.*;
+import ast.definition.FieldDefinition;
 import ast.definition.FunctionDefinition;
+import ast.definition.StructDefinition;
 import ast.statement.*;
 import ast.expression.*;
 import ast.type.*;
@@ -223,8 +225,18 @@ public class TypeChecking extends DefaultVisitor {
 
 		super.visit(structAccess, param);
 
+        predicate(structAccess.getExpression().getType() instanceof StructType, "Expression must be of struct type", structAccess);
+
+        if (structAccess.getExpression().getType() instanceof StructType) {
+            StructType structType = (StructType) structAccess.getExpression().getType();
+            for (FieldDefinition fieldDefinition : structType.getStructDefinition().getFieldDefinitions()) {
+                if (fieldDefinition.getName().equals(structAccess.getName())) {
+                    structAccess.setType(fieldDefinition.getType());
+                }
+            }
+        }
+
 		structAccess.setLvalue(true);
-		structAccess.setType(new StructType(structAccess.getName()));
 
 		return null;
 	}
@@ -338,10 +350,10 @@ public class TypeChecking extends DefaultVisitor {
     // Auxiliary methods
 
     private boolean sameType(Type typeA, Type typeB) {
+        System.out.println(typeA.getClass() + " " + typeB.getClass());
         if (typeA == null || typeB == null)
             return false;
-
-        return typeA.equals(typeB);
+        return typeA.getClass().equals(typeB.getClass());
     }
 
     private boolean isNum(Type typeA) {
