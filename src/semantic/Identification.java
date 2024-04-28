@@ -163,6 +163,9 @@ public class Identification extends DefaultVisitor {
 			return null;
 		}
 
+		if (varDefinition.getType() != null)
+			varDefinition.getType().accept(this, param);
+
 		varDefinitions.put(varDefinition.getName(), varDefinition);
 
 		return null;

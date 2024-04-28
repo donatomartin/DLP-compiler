@@ -11,8 +11,8 @@ program -> definition*;
 
 varDefinition:definition -> string type;
 structDefinition:definition -> string fieldDefinition*;
-functionDefinition:definition -> string parameters:varDefinition* type? localVariables:varDefinition* statement*;
 fieldDefinition:definition -> string type;
+functionDefinition:definition -> string parameters:varDefinition* type? localVariables:varDefinition* statement*;
 
 print:statement -> expressions:expression*;
 read:statement -> expression;
