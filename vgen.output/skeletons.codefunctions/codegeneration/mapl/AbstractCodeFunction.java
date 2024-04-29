@@ -165,6 +165,33 @@ public abstract class AbstractCodeFunction extends ExceptionThrowerVisitor {
     }
 
 
+    // Code Function: 'define'
+
+    protected Object define(AST node, Object param) {
+        return node.accept(specification.getVisitor(MaplCodeSpecification.CodeFunction.DEFINE), param);
+    }
+
+    protected Object define(AST node) {
+        return define(node, null);
+    }
+
+    protected <T extends AST> void define(Stream<T> nodes, Object param) {
+        nodes.forEach(node -> define(node, param));
+    }
+
+    protected <T extends AST> void define(Stream<T> nodes) {
+        nodes.forEach(this::define);
+    }
+
+    protected <T extends AST> Object define(Optional<T> optionalNode, Object param) {
+        return optionalNode.map(node -> define(node, param)).orElse(null);
+    }
+
+    protected <T extends AST> Object define(Optional<T> optionalNode) {
+        return optionalNode.map(this::define).orElse(null);
+    }
+
+
     // Code Function: 'metadata'
 
     protected Object metadata(AST node, Object param) {

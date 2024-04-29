@@ -69,6 +69,7 @@ run[program]
 execute[statement]
 value[expression]
 address[expression]
+define[definition]
 
 metadata[program]
 metadata[varDefinition]

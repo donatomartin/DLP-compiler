@@ -3,6 +3,7 @@
 package codegeneration.mapl.codefunctions;
 
 import ast.*;
+import ast.definition.Definition;
 import codegeneration.mapl.*;
 
 
@@ -17,7 +18,15 @@ public class Run extends AbstractCodeFunction {
 	@Override
 	public Object visit(Program program, Object param) {
 
-		out("<instruction>");
+		// define(program.definitions());
+
+		out("#SOURCE " + this.getSpecification().getSourceFile());
+		out("CALL main");
+		out("HALT");
+
+		for (Definition definition : program.getDefinitions()) {
+			define(definition, param);
+		}
 
 		return null;
 	}

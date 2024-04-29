@@ -13,13 +13,13 @@ public class Execute extends AbstractCodeFunction {
     }
 
 
-	// class Print(Expression expression)
+	// class Print(List<Expression> expressions)
 	// phase TypeChecking { FunctionDefinition function }
 	@Override
 	public Object visit(Print print, Object param) {
 
-		// value(print.getExpression());
-		// address(print.getExpression());
+		// value(print.expressions());
+		// address(print.expressions());
 
 		out("<instruction>");
 

@@ -1,1 +1,18 @@
+#SOURCE input.txt
+CALL main
+HALT
+<instruction>
+<instruction>
+<instruction>
+<instruction>
+<instruction>
+<instruction>
+<instruction>
+<instruction>
+<instruction>
+<instruction>
+<instruction>
+<instruction>
+<instruction>
+<instruction>
 <instruction>
