@@ -38,7 +38,6 @@ public class TypeChecking extends DefaultVisitor {
 	public Object visit(FunctionDefinition functionDefinition, Object param) {
 
         for (Statement statement : functionDefinition.getStatements()) {
-
             statement.setFunction(functionDefinition);
         }
 
@@ -107,18 +106,20 @@ public class TypeChecking extends DefaultVisitor {
 	@Override
 	public Object visit(Conditional conditional, Object param) {
 
-        super.visit(conditional, param);
-
         Expression expression = conditional.getExpression();
-        predicate(expression.getType() instanceof IntType, "Expression must be of boolean type", conditional);
+        expression.accept(this, param);
+        predicate(expression.getType() instanceof IntType, "Expression must be of int type", conditional);
 
-        for (Statement statement : conditional.getIfStatements()) {
+        for (Statement statement : conditional.getIfStatements())  {
             statement.setFunction(conditional.getFunction());
+            statement.accept(this, param);
         }
-
+        
         for (Statement statement : conditional.getElseStatements()) {
             statement.setFunction(conditional.getFunction());
+            statement.accept(this, param);
         }
+
 
 		return null;
 	}
@@ -148,7 +149,7 @@ public class TypeChecking extends DefaultVisitor {
         super.visit(returnValue, param);
 
         if (returnValue.getExpression().isEmpty()) {
-            predicate(returnValue.getFunction().getType().isEmpty(), "Return type does not match function empty return type", returnValue);
+            predicate(returnValue.getFunction().getType() != null, "Return type does not match function empty return type", returnValue);
         }
 
         else {
@@ -365,7 +366,6 @@ public class TypeChecking extends DefaultVisitor {
         if (typeA == null || typeB == null)
             return false;
 
-        System.out.println(typeA.getClass() + " " + typeB.getClass());
         return typeA.getClass().equals(typeB.getClass());
     }
 
