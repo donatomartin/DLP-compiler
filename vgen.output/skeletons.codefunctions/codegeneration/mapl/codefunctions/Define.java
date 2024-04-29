@@ -18,9 +18,9 @@ public class Define extends AbstractCodeFunction {
 	@Override
 	public Object visit(VarDefinition varDefinition, Object param) {
 
-		out("#GLOBAL " + node.getNombre() + ":" + node.getTipo().getMAPLName());
-		return null;
+		out("<instruction>");
 
+		return null;
 	}
 
 	// class StructDefinition(String name, List<FieldDefinition> fieldDefinitions)
@@ -28,9 +28,11 @@ public class Define extends AbstractCodeFunction {
 	@Override
 	public Object visit(StructDefinition structDefinition, Object param) {
 
-		out("#TYPE " + node.getNombre() + ":" + node.getTipo().getMAPLName());
-		return null;
+		// define(structDefinition.fieldDefinitions());
 
+		out("<instruction>");
+
+		return null;
 	}
 
 	// class FieldDefinition(String name, Type type)
@@ -40,8 +42,8 @@ public class Define extends AbstractCodeFunction {
 	public Object visit(FieldDefinition fieldDefinition, Object param) {
 
 		out("<instruction>");
-		return null;
 
+		return null;
 	}
 
 	// class FunctionDefinition(String name, List<VarDefinition> parameters, Optional<Type> type, List<VarDefinition> localVariables, List<Statement> statements)
@@ -49,15 +51,13 @@ public class Define extends AbstractCodeFunction {
 	@Override
 	public Object visit(FunctionDefinition functionDefinition, Object param) {
 
-		out(functionDefinition.getName() + ":");
+		// define(functionDefinition.parameters());
+		// metadata(functionDefinition.parameters());
 
-		define(functionDefinition.parameters());
-		metadata(functionDefinition.parameters());
+		// define(functionDefinition.localVariables());
+		// metadata(functionDefinition.localVariables());
 
-		define(functionDefinition.localVariables());
-		metadata(functionDefinition.localVariables());
-
-		execute(functionDefinition.statements());
+		// execute(functionDefinition.statements());
 
 		out("<instruction>");
 

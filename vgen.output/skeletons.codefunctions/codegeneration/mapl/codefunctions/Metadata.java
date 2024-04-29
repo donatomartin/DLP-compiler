@@ -35,4 +35,34 @@ public class Metadata extends AbstractCodeFunction {
 		return null;
 	}
 
+	// class StructDefinition(String name, List<FieldDefinition> fieldDefinitions)
+	// phase MemoryAllocation { int address }
+	@Override
+	public Object visit(StructDefinition structDefinition, Object param) {
+
+		// define(structDefinition.fieldDefinitions());
+
+		out("<instruction>");
+
+		return null;
+	}
+
+	// class FunctionDefinition(String name, List<VarDefinition> parameters, Optional<Type> type, List<VarDefinition> localVariables, List<Statement> statements)
+	// phase MemoryAllocation { int address }
+	@Override
+	public Object visit(FunctionDefinition functionDefinition, Object param) {
+
+		// define(functionDefinition.parameters());
+		// metadata(functionDefinition.parameters());
+
+		// define(functionDefinition.localVariables());
+		// metadata(functionDefinition.localVariables());
+
+		// execute(functionDefinition.statements());
+
+		out("<instruction>");
+
+		return null;
+	}
+
 }

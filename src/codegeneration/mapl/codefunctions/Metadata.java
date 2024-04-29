@@ -18,9 +18,7 @@ public class Metadata extends AbstractCodeFunction {
 	@Override
 	public Object visit(Program program, Object param) {
 
-		// define(program.definitions());
-
-		out("<instruction>");
+		out("#SOURCE " + this.getSpecification().getSourceFile());
 
 		return null;
 	}
@@ -30,7 +28,27 @@ public class Metadata extends AbstractCodeFunction {
 	@Override
 	public Object visit(VarDefinition varDefinition, Object param) {
 
-		out("<instruction>");
+		out("#GLOBAL " + varDefinition.getName() + " " + varDefinition.getType());
+
+		return null;
+	}
+
+	// class StructDefinition(String name, List<FieldDefinition> fieldDefinitions)
+	// phase MemoryAllocation { int address }
+	@Override
+	public Object visit(StructDefinition structDefinition, Object param) {
+
+		out("#TYPE " + structDefinition.getName() + " " + structDefinition.getFieldDefinitions().size());
+
+		return null;
+	}
+
+	// class FunctionDefinition(String name, List<VarDefinition> parameters, Optional<Type> type, List<VarDefinition> localVariables, List<Statement> statements)
+	// phase MemoryAllocation { int address }
+	@Override
+	public Object visit(FunctionDefinition functionDefinition, Object param) {
+
+		out(functionDefinition.getName() + ":");
 
 		return null;
 	}

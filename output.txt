@@ -1,18 +1,30 @@
 #SOURCE input.txt
 CALL main
 HALT
+#TYPE Pareja 2
+#GLOBAL pareja StructType{ name=Pareja}
+#TYPE Empleado 1
+#TYPE Empresa 1
+#GLOBAL acme ArrayType{ intValue=2 type=StructType{ name=Empresa}}
+#GLOBAL fibonacci ArrayType{ intValue=8 type=ArrayType{ intValue=3 type=IntType{}}}
+p:
+ENTER 0
+f:
+ENTER 3
+#LINE 47
 <instruction>
 <instruction>
+STORE
+#LINE 48
 <instruction>
 <instruction>
+STORE
+<instruction>
+JZ else1531333864
+#LINE 50
 <instruction>
 <instruction>
+STORE
+#LINE 51
 <instruction>
-<instruction>
-<instruction>
-<instruction>
-<instruction>
-<instruction>
-<instruction>
-<instruction>
-<instruction>
+<inst

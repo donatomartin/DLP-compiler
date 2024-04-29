@@ -20,7 +20,7 @@ public class Run extends AbstractCodeFunction {
 
 		// define(program.definitions());
 
-		out("#SOURCE " + this.getSpecification().getSourceFile());
+		metadata(program, param);
 		out("CALL main");
 		out("HALT");
 

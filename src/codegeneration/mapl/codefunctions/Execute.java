@@ -18,10 +18,11 @@ public class Execute extends AbstractCodeFunction {
 	@Override
 	public Object visit(Print print, Object param) {
 
-		// value(print.expressions());
-		// address(print.expressions());
+		out("#LINE " + print.end().getLine());
 
-		out("<instruction>");
+		value(print, param);
+		
+		out("OUT");
 
 		return null;
 	}
@@ -31,10 +32,14 @@ public class Execute extends AbstractCodeFunction {
 	@Override
 	public Object visit(Read read, Object param) {
 
-		// value(read.getExpression());
-		// address(read.getExpression());
+		out("#LINE " + read.end().getLine());
 
-		out("<instruction>");
+		address(read, param);
+
+		out("IN");
+
+		out("STORE");
+
 
 		return null;
 	}
@@ -58,13 +63,13 @@ public class Execute extends AbstractCodeFunction {
 	@Override
 	public Object visit(Assignment assignment, Object param) {
 
-		// value(assignment.getLeft());
-		// address(assignment.getLeft());
+		out("#LINE " + assignment.end().getLine());
 
-		// value(assignment.getRight());
-		// address(assignment.getRight());
+		address(assignment.getLeft(), param);
 
-		out("<instruction>");
+		value(assignment.getRight(), param);
+
+		out("STORE");
 
 		return null;
 	}
@@ -74,14 +79,17 @@ public class Execute extends AbstractCodeFunction {
 	@Override
 	public Object visit(Conditional conditional, Object param) {
 
-		// value(conditional.getExpression());
-		// address(conditional.getExpression());
+		value(conditional.getExpression(), param);
 
-		// execute(conditional.ifStatements());
+		out("JZ else" + conditional.hashCode());
 
-		// execute(conditional.elseStatements());
+		for (Statement statement : conditional.getIfStatements()) {
+			execute(statement, param);
+		}
 
-		out("<instruction>");
+		out("JMP endif" + conditional.hashCode());
+
+		out("else" + conditional.hashCode() + ":");
 
 		return null;
 	}

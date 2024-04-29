@@ -3,6 +3,7 @@
 package codegeneration.mapl.codefunctions;
 
 import ast.definition.*;
+import ast.statement.Statement;
 import codegeneration.mapl.*;
 
 
@@ -18,7 +19,7 @@ public class Define extends AbstractCodeFunction {
 	@Override
 	public Object visit(VarDefinition varDefinition, Object param) {
 
-		out("<instruction>");
+		metadata(varDefinition, param);
 
 		return null;
 	}
@@ -28,9 +29,7 @@ public class Define extends AbstractCodeFunction {
 	@Override
 	public Object visit(StructDefinition structDefinition, Object param) {
 
-		// define(structDefinition.fieldDefinitions());
-
-		out("<instruction>");
+		out("#TYPE " + structDefinition.getName() + " " + structDefinition.getFieldDefinitions().size());
 
 		return null;
 	}
@@ -41,8 +40,6 @@ public class Define extends AbstractCodeFunction {
 	@Override
 	public Object visit(FieldDefinition fieldDefinition, Object param) {
 
-		out("<instruction>");
-
 		return null;
 	}
 
@@ -51,15 +48,13 @@ public class Define extends AbstractCodeFunction {
 	@Override
 	public Object visit(FunctionDefinition functionDefinition, Object param) {
 
-		// define(functionDefinition.parameters());
-		// metadata(functionDefinition.parameters());
+		metadata(functionDefinition, param);
 
-		// define(functionDefinition.localVariables());
-		// metadata(functionDefinition.localVariables());
+		out("ENTER " + functionDefinition.getLocalVariables().size());
 
-		// execute(functionDefinition.statements());
-
-		out("<instruction>");
+		for (Statement statement : functionDefinition.getStatements()) {
+			execute(statement, param);
+		}
 
 		return null;
 	}
