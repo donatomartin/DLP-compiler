@@ -129,13 +129,13 @@ public class TypeChecking extends DefaultVisitor {
 	@Override
 	public Object visit(While whileValue, Object param) {
 
-		super.visit(whileValue, param);
-
         Expression expression = whileValue.getExpression();
+        expression.accept(this, param);
         predicate(expression.getType() instanceof IntType, "Expression must be of boolean type", whileValue);
 
         for (Statement statement : whileValue.getLoopStatements()) {
             statement.setFunction(whileValue.getFunction());
+            statement.accept(this, param);
         }
 		
 		return null;
