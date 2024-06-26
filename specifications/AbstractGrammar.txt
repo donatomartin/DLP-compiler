@@ -72,6 +72,4 @@ address[expression]
 define[definition]
 
 metadata[program]
-metadata[varDefinition]
-metadata[structDefinition]
-metadata[functionDefinition]
+metadata[definition]

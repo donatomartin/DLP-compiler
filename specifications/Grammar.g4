@@ -16,25 +16,19 @@ program returns [Program ast]
 
 definition returns [Definition ast]
 	: 'var' IDENT ':' type ';' { $ast = new VarDefinition($IDENT, $type.ast); }
-	| 'struct' IDENT '{' fieldDefinitions '}' ';'? { $ast = new StructDefinition($IDENT, $fieldDefinitions.list); }
+	| 'struct' IDENT '{' fieldDefinitions+=fieldDefinition* '}' ';'? { $ast = new StructDefinition($IDENT, $fieldDefinitions); }
 	| functionDefinition { $ast = $functionDefinition.ast; }
-	;
-
-fieldDefinitions returns [List<FieldDefinition> list = new ArrayList<FieldDefinition>()]
-	: (fieldDefinition {$list.add($fieldDefinition.ast);})*
 	;
 
 fieldDefinition returns [FieldDefinition ast]
 	: IDENT ':' type ';' { $ast = new FieldDefinition($IDENT, $type.ast); }
 	;
 
-functionDefinition returns [FunctionDefinition ast]
-	: IDENT '(' parameters ')' ':' type '{' definitions+=definition* statements+=statement* '}'  { $ast = new FunctionDefinition($IDENT, $parameters.list, $type.ast, $definitions, $statements); }
-	| IDENT '(' parameters ')' '{' definitions+=definition* statements+=statement* '}'  { $ast = new FunctionDefinition($IDENT, $parameters.list, null, $definitions, $statements); }
-	;
-
-parameters returns [List<VarDefinition> list = new ArrayList<VarDefinition>()]
-	: (p1=parameter { $list.add($p1.ast); } (',' p2=parameter {$list.add($p2.ast);} )*)? 
+functionDefinition returns [FunctionDefinition ast] locals [Type aux]
+	: IDENT '(' (parameters+=parameter (',' parameters+=parameter)*)? ')' (':' type {$aux = $type.ast;})? '{' definitions+=definition* statements+=statement* '}' 
+	{
+		if ($aux == null) { $aux = new VoidType(); }
+		$ast = new FunctionDefinition($IDENT, $parameters, $aux, $definitions, $statements); }
 	;
 
 parameter returns [VarDefinition ast]
