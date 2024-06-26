@@ -10,7 +10,8 @@ public class MemoryAllocation extends DefaultVisitor {
         ast.accept(this, null);
     }
     
-    	@Override
+    // class Program(List<Definition> definitions)
+    @Override
 	public Object visit(Program program, Object param) {
 
         int address = 0;
@@ -35,49 +36,36 @@ public class MemoryAllocation extends DefaultVisitor {
 	@Override
 	public Object visit(FunctionDefinition functionDefinition, Object param) {
 
+        super.visit(functionDefinition, param);
 
-        // Parameters
-        if (functionDefinition.getParameters() != null) {
-    
-            int address = 4;
-    
-            for (var parameter : functionDefinition.getParameters()) {
-                parameter.setAddress(address);
-                address += parameter.getType().getSize();
-            }
+        int paramOffset = 4;
+
+        for (var parameter : functionDefinition.getParameters()) {
+            parameter.setAddress(paramOffset);
+            paramOffset += parameter.getType().getSize();
         }
 
-        // Type
-        if (functionDefinition.getType().isPresent()) {
-            functionDefinition.getType().get().accept(this, param);
-        }
+        int localVariablesOffset = 0;
 
-        // Local Variables
-        if (functionDefinition.getLocalVariables() != null) {
-    
-            int address = 0;
-    
-            for (var localVariable : functionDefinition.getLocalVariables()) {
-                localVariable.setAddress(address);
-                address += localVariable.getType().getSize();
-            }
-
+        for (var localVariable : functionDefinition.getLocalVariables()) {
+            localVariable.setAddress(localVariablesOffset);
+            localVariablesOffset += localVariable.getType().getSize();
         }
 
         return null;
 	}
 
+    // class StructDefinition(String name, List<FieldDefinition> FieldDefinitions)
     @Override
     public Object visit(StructDefinition structDefinition, Object param) {
 
-        int address = 0;
+        super.visit(structDefinition, param);
+
+        int offset = 0;
 
         for (var fieldDefinition : structDefinition.getFieldDefinitions()) {
-            fieldDefinition.setAddress(address);
-            address += fieldDefinition.getType().getSize();
-
-            // In case there are nested structs
-            fieldDefinition.accept(this, param);
+            fieldDefinition.setAddress(offset);
+            offset += fieldDefinition.getType().getSize();
         }
 
         return null;
